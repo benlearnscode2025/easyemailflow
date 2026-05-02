@@ -64,6 +64,10 @@
             opacity: 0.03;
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
         }
+        #nav-pill {
+            border-radius: 9999px !important;
+            overflow: hidden !important;
+        }
         .custom-bezier {
             transition-timing-function: cubic-bezier(0.32, 0.72, 0, 1);
         }
@@ -74,7 +78,7 @@
 
     <!-- Navigation -->
     <nav class="fixed top-6 left-0 right-0 z-[60] flex justify-center px-4 pointer-events-none">
-        <div class="glass double-bezel pointer-events-auto">
+        <div id="nav-pill" class="glass double-bezel pointer-events-auto">
             <div class="px-6 py-2 flex items-center gap-8">
                 <a href="#" class="custom-bezier hover:scale-105 transition-transform flex items-center">
                     <img src="easyemaillogonobackground.png" alt="Easy Email Flow" class="h-10 w-auto">
