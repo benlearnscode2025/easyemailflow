@@ -84,6 +84,10 @@
             border-radius: 9999px !important;
             overflow: hidden !important;
         }
+        .edit-mode-active [contenteditable="true"]:hover {
+            outline: 2px dashed #08605F;
+            outline-offset: 4px;
+        }
         .custom-bezier {
             transition-timing-function: cubic-bezier(0.32, 0.72, 0, 1);
         }
@@ -91,6 +95,16 @@
 </head>
 <body class="bg-brand-cream text-brand-dark font-sans selection:bg-brand-teal selection:text-white overflow-x-hidden">
     <div class="noise"></div>
+
+    <!-- Live Edit Toggle -->
+    <div class="fixed bottom-6 right-6 z-[100] flex items-center gap-3">
+        <div id="edit-indicator" class="hidden px-4 py-2 bg-red-500 text-white text-[10px] font-bold uppercase tracking-widest rounded-full animate-pulse shadow-xl">
+            Live Editing Active
+        </div>
+        <button id="toggle-edit" class="w-12 h-12 bg-brand-dark text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all custom-bezier group">
+            <svg class="w-5 h-5 group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+        </button>
+    </div>
 
     <!-- Navigation -->
     <nav class="fixed top-6 left-0 right-0 z-[60] flex justify-center px-4 pointer-events-none">
