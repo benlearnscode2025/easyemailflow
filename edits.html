@@ -28,6 +28,11 @@
         .drawing-active #preview-frame {
             pointer-events: none;
         }
+        .tool-btn-active {
+            background-color: white !important;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+            color: black !important;
+        }
     </style>
 </head>
 <body class="overflow-hidden">
@@ -40,10 +45,20 @@
         
         <!-- Mode Toggles -->
         <div class="flex items-center gap-1 bg-gray-100 p-1 rounded-full">
-            <button id="tool-nav" class="px-4 py-2 rounded-full font-bold text-[10px] uppercase transition-all bg-white shadow-sm text-black">Navigate</button>
+            <button id="tool-nav" class="px-4 py-2 rounded-full font-bold text-[10px] uppercase transition-all tool-btn-active">Navigate</button>
             <button id="tool-draw" class="px-4 py-2 rounded-full font-bold text-[10px] uppercase transition-all text-gray-500 hover:text-black">Draw</button>
             <button id="tool-text" class="px-4 py-2 rounded-full font-bold text-[10px] uppercase transition-all text-gray-500 hover:text-black">Text</button>
             <button id="tool-select" class="px-4 py-2 rounded-full font-bold text-[10px] uppercase transition-all text-gray-500 hover:text-black">Select</button>
+        </div>
+
+        <!-- History Controls -->
+        <div class="flex items-center gap-1 border-l border-black/5 pl-4">
+            <button id="btn-undo" class="w-8 h-8 rounded-full flex items-center justify-center hover:bg-gray-100 text-gray-500 transition-colors disabled:opacity-30" title="Undo (Ctrl+Z)">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"></path></svg>
+            </button>
+            <button id="btn-redo" class="w-8 h-8 rounded-full flex items-center justify-center hover:bg-gray-100 text-gray-500 transition-colors disabled:opacity-30" title="Redo (Ctrl+Y)">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 10h-10a8 8 0 00-8 8v2m18-10l-6 6m6-6l-6-6"></path></svg>
+            </button>
         </div>
 
         <button id="btn-clear" class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-red-50 text-red-500 transition-colors" title="Clear All">
@@ -73,7 +88,15 @@
             select: document.getElementById('tool-select')
         };
         
+        const historyBtns = {
+            undo: document.getElementById('btn-undo'),
+            redo: document.getElementById('btn-redo')
+        };
+
         let currentMode = 'nav';
+        let history = [];
+        let historyIndex = -1;
+        let isHandlingHistory = false;
 
         const canvas = new fabric.Canvas('markup-canvas', {
             isDrawingMode: false,
@@ -105,24 +128,95 @@
             });
 
             Object.keys(tools).forEach(key => {
-                const btn = tools[key];
-                if (key === mode) {
-                    btn.classList.add('bg-white', 'shadow-sm', 'text-black');
-                    btn.classList.remove('text-gray-500');
-                } else {
-                    btn.classList.remove('bg-white', 'shadow-sm', 'text-black');
-                    btn.classList.add('text-gray-500');
-                }
+                tools[key].classList.toggle('tool-btn-active', key === mode);
+                if (key !== mode) tools[key].classList.add('text-gray-500');
+                else tools[key].classList.remove('text-gray-500');
             });
 
             modeText.innerText = mode.charAt(0).toUpperCase() + mode.slice(1);
         };
 
+        // History Management
+        const saveState = () => {
+            if (isHandlingHistory) return;
+            
+            const state = JSON.stringify(canvas);
+            
+            // Remove any "redo" states if we've made a new change
+            if (historyIndex < history.length - 1) {
+                history = history.slice(0, historyIndex + 1);
+            }
+            
+            history.push(state);
+            historyIndex++;
+            
+            // Limit history to 50 states
+            if (history.length > 50) {
+                history.shift();
+                historyIndex--;
+            }
+            
+            updateHistoryButtons();
+            localStorage.setItem('eef_markup_final', state);
+        };
+
+        const updateHistoryButtons = () => {
+            historyBtns.undo.disabled = historyIndex <= 0;
+            historyBtns.redo.disabled = historyIndex >= history.length - 1;
+        };
+
+        const undo = () => {
+            if (historyIndex > 0) {
+                isHandlingHistory = true;
+                historyIndex--;
+                canvas.loadFromJSON(history[historyIndex], () => {
+                    canvas.renderAll();
+                    isHandlingHistory = false;
+                    updateHistoryButtons();
+                    localStorage.setItem('eef_markup_final', history[historyIndex]);
+                });
+            }
+        };
+
+        const redo = () => {
+            if (historyIndex < history.length - 1) {
+                isHandlingHistory = true;
+                historyIndex++;
+                canvas.loadFromJSON(history[historyIndex], () => {
+                    canvas.renderAll();
+                    isHandlingHistory = false;
+                    updateHistoryButtons();
+                    localStorage.setItem('eef_markup_final', history[historyIndex]);
+                });
+            }
+        };
+
+        // Tool Event Listeners
         tools.nav.onclick = () => setMode('nav');
         tools.draw.onclick = () => setMode('draw');
         tools.text.onclick = () => setMode('text');
         tools.select.onclick = () => setMode('select');
+        
+        historyBtns.undo.onclick = undo;
+        historyBtns.redo.onclick = redo;
 
+        // Keyboard Shortcuts
+        window.addEventListener('keydown', (e) => {
+            if (e.ctrlKey || e.metaKey) {
+                if (e.key === 'z') undo();
+                if (e.key === 'y') redo();
+            }
+            if (e.key === 'Delete' || e.key === 'Backspace') {
+                const activeObjects = canvas.getActiveObjects();
+                if (activeObjects.length) {
+                    canvas.discardActiveObject();
+                    canvas.remove(...activeObjects);
+                    saveState();
+                }
+            }
+        });
+
+        // Handle Text Addition
         canvas.on('mouse:down', (options) => {
             if (currentMode === 'text' && !options.target) {
                 const pointer = canvas.getPointer(options.e);
@@ -138,24 +232,37 @@
                 canvas.add(text);
                 canvas.setActiveObject(text);
                 text.enterEditing();
-                saveMarkup();
+                saveState();
             }
         });
 
-        const saveMarkup = () => localStorage.setItem('eef_markup_final', JSON.stringify(canvas));
         const loadMarkup = () => {
             const data = localStorage.getItem('eef_markup_final');
-            if (data) canvas.loadFromJSON(data, canvas.renderAll.bind(canvas));
+            if (data) {
+                canvas.loadFromJSON(data, () => {
+                    canvas.renderAll();
+                    // Initialize history with loaded state
+                    history = [data];
+                    historyIndex = 0;
+                    updateHistoryButtons();
+                });
+            } else {
+                // Initialize history with empty state
+                saveState();
+            }
         };
 
-        canvas.on('path:created', saveMarkup);
-        canvas.on('object:modified', saveMarkup);
-        canvas.on('text:changed', saveMarkup);
+        canvas.on('path:created', saveState);
+        canvas.on('object:modified', saveState);
+        canvas.on('text:changed', saveState);
 
         document.getElementById('btn-clear').addEventListener('click', () => {
             if(confirm('Clear all markups?')) {
                 canvas.clear();
                 localStorage.removeItem('eef_markup_final');
+                history = [];
+                historyIndex = -1;
+                saveState();
             }
         });
 
