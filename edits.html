@@ -38,11 +38,13 @@
             <span id="mode-text" class="text-[8px] font-bold text-gray-400 uppercase">Navigating</span>
         </div>
         
-        <!-- Toggle Draw/Scroll -->
-        <button id="btn-toggle-mode" class="flex items-center gap-2 px-4 py-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-all font-bold text-xs" title="Switch between scrolling and drawing">
-            <span id="toggle-icon" class="w-2 h-2 rounded-full bg-gray-400"></span>
-            <span id="btn-text">Enable Drawing</span>
-        </button>
+        <!-- Mode Toggles -->
+        <div class="flex items-center gap-1 bg-gray-100 p-1 rounded-full">
+            <button id="tool-nav" class="px-4 py-2 rounded-full font-bold text-[10px] uppercase transition-all bg-white shadow-sm text-black" title="Scroll and click normally">Navigate</button>
+            <button id="tool-draw" class="px-4 py-2 rounded-full font-bold text-[10px] uppercase transition-all text-gray-500 hover:text-black" title="Draw freehand">Draw</button>
+            <button id="tool-text" class="px-4 py-2 rounded-full font-bold text-[10px] uppercase transition-all text-gray-500 hover:text-black" title="Click to add text">Text</button>
+            <button id="tool-select" class="px-4 py-2 rounded-full font-bold text-[10px] uppercase transition-all text-gray-500 hover:text-black" title="Move or edit items">Select</button>
+        </div>
 
         <button id="btn-clear" class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-red-50 text-red-500 transition-colors" title="Clear All">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
@@ -139,6 +141,30 @@
                 const scrollTop = frame.contentWindow.pageYOffset;
                 wrapper.style.top = `-${scrollTop}px`;
             };
+        };
+
+        window.onresize = updateCanvasSize;
+    </script>
+</body>
+</html>
+enderAll.bind(canvas));
+        };
+
+        canvas.on('path:created', saveMarkup);
+        canvas.on('object:modified', saveMarkup);
+        canvas.on('text:changed', saveMarkup);
+
+        document.getElementById('btn-clear').addEventListener('click', () => {
+            if(confirm('Clear all markups?')) {
+                canvas.clear();
+                localStorage.removeItem('eef_markup_v3');
+            }
+        });
+
+        frame.onload = () => {
+            updateCanvasSize();
+            loadMarkup();
+            frame.contentWindow.onscroll = syncScroll;
         };
 
         window.onresize = updateCanvasSize;
