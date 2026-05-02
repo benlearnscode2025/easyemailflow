@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,103 +8,140 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200..800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
-        #canvas-container {
+        body { margin: 0; padding: 0; background: #f3f4f6; }
+        #canvas-wrapper {
             position: absolute;
             top: 0;
             left: 0;
             z-index: 1000;
-            pointer-events: none;
+            pointer-events: none; /* Let clicks pass through to the iframe when not drawing */
         }
-        canvas {
-            pointer-events: auto;
-        }
-        .drawing-mode #canvas-container {
-            pointer-events: auto;
-        }
-        .toolbar {
-            transition: all 0.3s cubic-bezier(0.32, 0.72, 0, 1);
-        }
-        iframe {
+        #preview-frame {
             width: 100vw;
             height: 100vh;
             border: none;
+            display: block;
+        }
+        .drawing-active #canvas-wrapper {
+            pointer-events: auto; /* Catch clicks for drawing */
+        }
+        .drawing-active #preview-frame {
+            pointer-events: none; /* Prevent site interaction when drawing */
         }
     </style>
 </head>
-<body class="bg-gray-100 overflow-hidden">
-    <!-- Overlay UI -->
-    <div class="fixed top-6 left-1/2 -translate-x-1/2 z-[2000] flex items-center gap-4 bg-white/80 backdrop-blur-xl p-2 rounded-full shadow-2xl border border-black/5 toolbar">
-        <div class="px-4 py-2 border-r border-black/5">
-            <span class="text-[10px] font-bold uppercase tracking-widest text-brand-teal">Feedback Mode</span>
+<body class="overflow-hidden">
+    <!-- Toolbar -->
+    <div class="fixed top-6 left-1/2 -translate-x-1/2 z-[2000] flex items-center gap-4 bg-white/90 backdrop-blur-xl p-2 rounded-full shadow-2xl border border-black/5">
+        <div class="px-4 py-2 border-r border-black/5 flex flex-col">
+            <span class="text-[9px] font-bold uppercase tracking-widest text-teal-600">Review Mode</span>
+            <span id="mode-text" class="text-[8px] font-bold text-gray-400 uppercase">Navigating</span>
         </div>
         
-        <button id="btn-draw" class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors bg-brand-dark text-white shadow-lg" title="Pencil">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+        <!-- Toggle Draw/Scroll -->
+        <button id="btn-toggle-mode" class="flex items-center gap-2 px-4 py-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-all font-bold text-xs" title="Switch between scrolling and drawing">
+            <span id="toggle-icon" class="w-2 h-2 rounded-full bg-gray-400"></span>
+            <span id="btn-text">Enable Drawing</span>
         </button>
 
         <button id="btn-clear" class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-red-50 text-red-500 transition-colors" title="Clear All">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
         </button>
 
-        <a href="index.html" class="px-6 py-2 bg-gray-900 text-white rounded-full text-xs font-bold hover:scale-105 transition-transform">Done</a>
+        <a href="index.html" class="px-6 py-2 bg-black text-white rounded-full text-xs font-bold hover:scale-105 transition-transform">Done</a>
     </div>
 
-    <!-- The Site in the Background -->
+    <!-- The Site -->
     <iframe id="preview-frame" src="index.html"></iframe>
 
-    <!-- Drawing Canvas Overlay -->
-    <div id="canvas-container">
+    <!-- Overlay Canvas -->
+    <div id="canvas-wrapper">
         <canvas id="markup-canvas"></canvas>
     </div>
 
     <script>
+        const frame = document.getElementById('preview-frame');
+        const wrapper = document.getElementById('canvas-wrapper');
+        const modeText = document.getElementById('mode-text');
+        const btnText = document.getElementById('btn-text');
+        const toggleIcon = document.getElementById('toggle-icon');
+        
+        let isDrawing = false;
+
+        // Initialize Fabric Canvas with high height to cover scrollable area
+        // We'll sync this with the iframe's content height
         const canvas = new fabric.Canvas('markup-canvas', {
-            isDrawingMode: true,
-            width: window.innerWidth,
-            height: window.innerHeight
+            isDrawingMode: false,
+            selection: false
         });
 
-        // Set pencil style
-        canvas.freeDrawingBrush.color = '#ef4444'; // Red for visibility
+        canvas.freeDrawingBrush.color = '#ef4444';
         canvas.freeDrawingBrush.width = 4;
 
-        // Auto-save logic
-        const saveMarkup = () => {
-            const data = JSON.stringify(canvas);
-            localStorage.setItem('eef_markup', data);
+        const updateCanvasSize = () => {
+            try {
+                const doc = frame.contentDocument || frame.contentWindow.document;
+                const height = Math.max(doc.body.scrollHeight, doc.documentElement.scrollHeight, window.innerHeight);
+                canvas.setDimensions({ width: window.innerWidth, height: height });
+            } catch (e) {
+                canvas.setDimensions({ width: window.innerWidth, height: 5000 }); // Fallback
+            }
         };
 
-        const loadMarkup = () => {
-            const data = localStorage.getItem('eef_markup');
-            if (data) {
-                canvas.loadFromJSON(data);
+        // Mode Switching
+        document.getElementById('btn-toggle-mode').addEventListener('click', () => {
+            isDrawing = !isDrawing;
+            document.body.classList.toggle('drawing-active', isDrawing);
+            canvas.isDrawingMode = isDrawing;
+            
+            if (isDrawing) {
+                modeText.innerText = "Drawing Mode";
+                modeText.classList.replace('text-gray-400', 'text-red-500');
+                btnText.innerText = "Disable Drawing";
+                toggleIcon.classList.replace('bg-gray-400', 'bg-red-500');
+            } else {
+                modeText.innerText = "Navigating";
+                modeText.classList.replace('text-red-500', 'text-gray-400');
+                btnText.innerText = "Enable Drawing";
+                toggleIcon.classList.replace('bg-red-500', 'bg-gray-400');
             }
+        });
+
+        // Sync Scrolling: Make the canvas move with the iframe scroll
+        frame.contentWindow.addEventListener('scroll', () => {
+            const scrollTop = frame.contentWindow.scrollY;
+            wrapper.style.transform = `translateY(-${scrollTop}px)`;
+        });
+
+        // Auto-save logic
+        const saveMarkup = () => localStorage.setItem('eef_markup_v2', JSON.stringify(canvas));
+        const loadMarkup = () => {
+            const data = localStorage.getItem('eef_markup_v2');
+            if (data) canvas.loadFromJSON(data);
         };
 
         canvas.on('path:created', saveMarkup);
-        canvas.on('object:modified', saveMarkup);
-        canvas.on('object:removed', saveMarkup);
-
-        // Handle Resizing
-        window.addEventListener('resize', () => {
-            canvas.setWidth(window.innerWidth);
-            canvas.setHeight(window.innerHeight);
-            canvas.renderAll();
-        });
-
-        // UI Actions
+        
         document.getElementById('btn-clear').addEventListener('click', () => {
             if(confirm('Clear all markups?')) {
                 canvas.clear();
-                localStorage.removeItem('eef_markup');
+                localStorage.removeItem('eef_markup_v2');
             }
         });
 
-        // Load existing work
-        window.addEventListener('load', loadMarkup);
+        // Initial setup
+        frame.onload = () => {
+            updateCanvasSize();
+            loadMarkup();
+            
+            // Re-sync on frame scroll
+            frame.contentWindow.onscroll = () => {
+                const scrollTop = frame.contentWindow.pageYOffset;
+                wrapper.style.top = `-${scrollTop}px`;
+            };
+        };
 
-        console.log("Markup Mode Active. Use the red pencil to draw your edits.");
+        window.onresize = updateCanvasSize;
     </script>
 </body>
 </html>
