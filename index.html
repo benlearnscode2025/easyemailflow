@@ -34,12 +34,12 @@
                 extend: {
                     colors: {
                         brand: {
-                            dark: '#2F2504',
+                            dark: '#0F172A',
                             gold: '#D4B66F',
                             teal: '#08605F',
-                            grey: '#587B7F',
-                            light: '#7DBBC3',
-                            cream: '#FDFBF7'
+                            grey: '#64748B',
+                            light: '#94A3B8',
+                            cream: '#F8FAFC'
                         }
                     },
                     fontFamily: {
@@ -64,20 +64,22 @@
     </script>
     <style>
         .glass {
-            background: rgba(253, 251, 247, 0.7);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            background: rgba(248, 250, 252, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
         }
         @media (prefers-color-scheme: dark) {
             .glass {
-                background: rgba(47, 37, 4, 0.7);
+                background: rgba(15, 23, 42, 0.8);
             }
         }
-        .double-bezel {
-            @apply p-1.5 rounded-full bg-brand-dark/5 ring-1 ring-brand-dark/5 overflow-hidden dark:bg-white/5 dark:ring-white/10;
+        .flat-card {
+            @apply border border-slate-200 bg-white rounded-3xl overflow-hidden dark:border-white/10 dark:bg-slate-900/50;
         }
-        .double-bezel-inner {
-            @apply rounded-full bg-white shadow-[inset_0_1px_1px_rgba(0,0,0,0.05)] dark:bg-brand-dark/40 dark:shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)];
+        #nav-pill {
+            border-radius: 9999px !important;
+            overflow: hidden !important;
+            @apply border border-slate-200 dark:border-white/10;
         }
         .noise {
             position: fixed;
@@ -101,8 +103,6 @@
     </style>
 </head>
 <body class="bg-brand-cream text-brand-dark font-sans selection:bg-brand-teal selection:text-white overflow-x-hidden dark:bg-brand-dark dark:text-brand-cream">
-    <div class="noise dark:opacity-[0.05]"></div>
-
     <!-- Live Edit Toggle -->
     <div class="fixed bottom-6 right-6 z-[100] flex items-center gap-3">
         <a href="edits.html" class="w-12 h-12 bg-brand-dark text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all custom-bezier group dark:bg-brand-cream dark:text-brand-dark">
@@ -112,7 +112,7 @@
 
     <!-- Navigation -->
     <nav class="fixed top-6 left-0 right-0 z-[60] flex justify-center px-4 pointer-events-none">
-        <div id="nav-pill" class="glass double-bezel pointer-events-auto">
+        <div id="nav-pill" class="glass pointer-events-auto">
             <div class="px-6 py-2 flex items-center gap-8">
                 <a href="#" class="custom-bezier hover:scale-105 transition-transform flex items-center">
                     <img src="easyemaillogonobackground.png" alt="Easy Email Flow" class="h-10 w-auto">
@@ -120,7 +120,7 @@
                 <div class="hidden md:flex items-center gap-6">
                     <a href="#services" class="text-xs font-medium uppercase tracking-widest hover:text-brand-teal transition-colors custom-bezier dark:hover:text-brand-light">Services</a>
                     <a href="#strategy" class="text-xs font-medium uppercase tracking-widest hover:text-brand-teal transition-colors custom-bezier dark:hover:text-brand-light">Strategy</a>
-                    <a href="#flow" class="text-xs font-medium uppercase tracking-widest hover:text-brand-teal transition-colors custom-bezier dark:hover:text-brand-light">The Flow</a>
+                    <a href="#flow" class="text-xs font-medium uppercase tracking-widest hover:text-brand-teal transition-colors custom-bezier dark:hover:text-brand-light">The Flow</a>   
                 </div>
                 <a href="#contact" class="group flex items-center gap-2 bg-brand-teal text-white px-4 py-1.5 rounded-full text-xs font-semibold hover:scale-[1.02] active:scale-[0.98] transition-all custom-bezier dark:bg-brand-light dark:text-brand-dark">
                     Start Now
@@ -144,7 +144,7 @@
                 <h1 class="text-6xl md:text-8xl lg:text-9xl font-extrabold tracking-tight leading-[0.9] reveal" style="transition-delay: 100ms">
                     Easy Email <span class="text-brand-teal dark:text-brand-light">Flow.</span>
                 </h1>
-                
+
                 <p class="text-lg md:text-xl text-brand-grey max-w-2xl mx-auto font-medium reveal dark:text-brand-grey/80" style="transition-delay: 200ms">
                     Structuring Enduring Success through Forged Core Strategy. We are a boutique B2B agency.
                 </p>
@@ -161,10 +161,8 @@
             </div>
 
             <div class="mt-24 z-10 reveal" style="transition-delay: 400ms">
-                <div class="double-bezel max-w-4xl mx-auto">
-                    <div class="double-bezel-inner p-4 overflow-hidden">
-                        <img src="logo.jpeg" alt="Easy Email Flow Concept" class="w-full h-auto rounded-3xl object-cover hover:scale-[1.01] transition-transform duration-1000 dark:opacity-90">
-                    </div>
+                <div class="flat-card max-w-4xl mx-auto p-4">
+                    <img src="logo.jpeg" alt="Easy Email Flow Concept" class="w-full h-auto rounded-2xl object-cover hover:scale-[1.01] transition-transform duration-1000 dark:opacity-90">
                 </div>
             </div>
         </section>
@@ -184,72 +182,64 @@
             <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
                 <!-- Large Card -->
                 <div class="md:col-span-8 group reveal">
-                    <div class="double-bezel h-full">
-                        <div class="double-bezel-inner p-8 h-full flex flex-col justify-between hover:bg-white/50 transition-colors custom-bezier dark:hover:bg-brand-dark/20">
-                            <div class="space-y-4">
-                                <div class="w-12 h-12 rounded-2xl bg-brand-teal/10 flex items-center justify-center text-brand-teal group-hover:scale-110 transition-transform custom-bezier dark:bg-brand-light/10 dark:text-brand-light">
-                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                                </div>
-                                <h3 class="text-2xl font-bold">Forged Core Strategy</h3>
-                                <p class="text-brand-grey max-w-sm dark:text-brand-grey/80">High-level strategic planning that aligns your email channels with your broader business objectives.</p>
+                    <div class="flat-card p-8 h-full flex flex-col justify-between hover:bg-slate-50 transition-colors custom-bezier dark:hover:bg-slate-800/30">
+                        <div class="space-y-4">
+                            <div class="w-12 h-12 rounded-2xl bg-brand-teal/10 flex items-center justify-center text-brand-teal group-hover:scale-110 transition-transform custom-bezier dark:bg-brand-light/10 dark:text-brand-light">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                             </div>
-                            <div class="mt-12 flex flex-wrap gap-2">
-                                <span class="px-3 py-1 rounded-full bg-brand-cream border border-brand-dark/5 text-[10px] font-bold uppercase tracking-wider dark:bg-brand-dark dark:border-white/5">Audits</span>
-                                <span class="px-3 py-1 rounded-full bg-brand-cream border border-brand-dark/5 text-[10px] font-bold uppercase tracking-wider dark:bg-brand-dark dark:border-white/5">Roadmaps</span>
-                                <span class="px-3 py-1 rounded-full bg-brand-cream border border-brand-dark/5 text-[10px] font-bold uppercase tracking-wider dark:bg-brand-dark dark:border-white/5">Tech-Stack</span>
-                            </div>
+                            <h3 class="text-2xl font-bold">Forged Core Strategy</h3>
+                            <p class="text-brand-grey max-w-sm dark:text-brand-grey/80">High-level strategic planning that aligns your email channels with your broader business objectives.</p>
+                        </div>
+                        <div class="mt-12 flex flex-wrap gap-2">
+                            <span class="px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-[10px] font-bold uppercase tracking-wider dark:bg-slate-800 dark:border-white/5">Audits</span>
+                            <span class="px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-[10px] font-bold uppercase tracking-wider dark:bg-slate-800 dark:border-white/5">Roadmaps</span>
+                            <span class="px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-[10px] font-bold uppercase tracking-wider dark:bg-slate-800 dark:border-white/5">Tech-Stack</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Small Card -->
                 <div class="md:col-span-4 group reveal" style="transition-delay: 100ms">
-                    <div class="double-bezel h-full">
-                        <div class="double-bezel-inner p-8 h-full bg-brand-dark text-white hover:bg-brand-dark/95 transition-colors custom-bezier dark:bg-brand-dark dark:border dark:border-white/10">
-                            <div class="space-y-4">
-                                <div class="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center text-brand-gold">
-                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04Custom-bezierm2.77 7.647a11.996 11.996 0 002.273 6.63l.067.12a8.959 8.959 0 006.4 4.897 8.959 8.959 0 006.4-4.897l.067-.12a11.996 11.996 0 002.273-6.63l-.014-.247a11.955 11.955 0 01-8.618-3.041z"></path></svg>
-                                </div>
-                                <h3 class="text-2xl font-bold">Performance First</h3>
-                                <p class="text-white/60">Ensuring deliverability, compliance, and consistent performance across all ESPs.</p>
+                    <div class="flat-card p-8 h-full bg-brand-dark text-white hover:bg-slate-800 transition-colors custom-bezier">
+                        <div class="space-y-4">
+                            <div class="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center text-brand-gold">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04Custom-bezierm2.77 7.647a11.996 11.996 0 002.273 6.63l.067.12a8.959 8.959 0 006.4 4.897 8.959 8.959 0 006.4-4.897l.067-.12a11.996 11.996 0 002.273-6.63l-.014-.247a11.955 11.955 0 01-8.618-3.041z"></path></svg>
                             </div>
+                            <h3 class="text-2xl font-bold">Performance First</h3>
+                            <p class="text-white/60">Ensuring deliverability, compliance, and consistent performance across all ESPs.</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- Small Card 2 -->
                 <div class="md:col-span-4 group reveal" style="transition-delay: 200ms">
-                    <div class="double-bezel h-full">
-                        <div class="double-bezel-inner p-8 h-full bg-brand-gold/10 hover:bg-brand-gold/20 transition-colors custom-bezier dark:bg-brand-gold/5 dark:hover:bg-brand-gold/10">
-                            <div class="space-y-4">
-                                <div class="w-12 h-12 rounded-2xl bg-brand-gold/20 flex items-center justify-center text-brand-dark dark:text-brand-gold">
-                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path></svg>
-                                </div>
-                                <h3 class="text-2xl font-bold">Bespoke Design</h3>
-                                <p class="text-brand-grey dark:text-brand-grey/80">High-conversion, premium aesthetic templates tailored to your brand's unique identity.</p>
+                    <div class="flat-card p-8 h-full bg-slate-50 border border-slate-200 hover:bg-slate-100 transition-colors custom-bezier dark:bg-slate-900/50 dark:border-white/5">
+                        <div class="space-y-4">
+                            <div class="w-12 h-12 rounded-2xl bg-brand-gold/10 flex items-center justify-center text-brand-dark dark:text-brand-gold">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path></svg>
                             </div>
+                            <h3 class="text-2xl font-bold">Bespoke Design</h3>
+                            <p class="text-brand-grey dark:text-brand-grey/80">High-conversion, premium aesthetic templates tailored to your brand's unique identity.</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- Large Card 2 -->
                 <div class="md:col-span-8 group reveal" style="transition-delay: 300ms">
-                    <div class="double-bezel h-full">
-                        <div class="double-bezel-inner p-8 h-full bg-brand-teal text-white flex flex-col md:flex-row items-center gap-12 hover:bg-brand-teal/95 transition-colors custom-bezier dark:bg-brand-teal/40 dark:border dark:border-white/10">
-                            <div class="space-y-4 flex-1">
-                                <div class="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center text-brand-light">
-                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                </div>
-                                <h3 class="text-2xl font-bold">Lifecycle Automation</h3>
-                                <p class="text-white/70">Flows that work while you sleep. Welcome series, re-engagement, and predictive post-purchase sequences.</p>
+                    <div class="flat-card p-8 h-full bg-brand-teal text-white flex flex-col md:flex-row items-center gap-12 hover:bg-teal-700 transition-colors custom-bezier">
+                        <div class="space-y-4 flex-1">
+                            <div class="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center text-brand-light">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                             </div>
-                            <div class="flex-1 w-full flex items-center justify-center">
-                                <div class="relative w-full aspect-square max-w-[240px] border border-white/10 rounded-full flex items-center justify-center animate-spin-slow">
-                                    <div class="absolute inset-4 border border-white/20 rounded-full"></div>
-                                    <div class="absolute inset-8 border border-white/30 rounded-full"></div>
-                                    <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center text-brand-teal shadow-xl dark:bg-brand-light dark:text-brand-teal">
-                                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-                                    </div>
+                            <h3 class="text-2xl font-bold">Lifecycle Automation</h3>
+                            <p class="text-white/70">Flows that work while you sleep. Welcome series, re-engagement, and predictive post-purchase sequences.</p>
+                        </div>
+                        <div class="flex-1 w-full flex items-center justify-center">
+                            <div class="relative w-full aspect-square max-w-[240px] border border-white/10 rounded-full flex items-center justify-center animate-spin-slow">
+                                <div class="absolute inset-4 border border-white/20 rounded-full"></div>
+                                <div class="absolute inset-8 border border-white/30 rounded-full"></div>
+                                <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center text-brand-teal shadow-xl dark:bg-brand-light dark:text-brand-teal">
+                                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
                                 </div>
                             </div>
                         </div>
@@ -259,20 +249,20 @@
         </section>
 
         <!-- Strategy Section (Editorial Split) -->
-        <section id="strategy" class="py-24 md:py-40 bg-brand-dark text-white relative overflow-hidden dark:bg-black/20">
-            <div class="absolute top-0 right-0 w-full h-full opacity-10 pointer-events-none dark:opacity-5">
+        <section id="strategy" class="py-24 md:py-40 bg-brand-dark text-white relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-full h-full opacity-5 pointer-events-none">
                 <svg viewBox="0 0 100 100" class="w-full h-full text-brand-gold fill-current">
                     <circle cx="100" cy="0" r="80" />
                 </svg>
             </div>
-            
+
             <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-24 items-center">
                 <div class="space-y-12 reveal">
                     <div class="space-y-4">
                         <div class="text-[10px] uppercase tracking-[0.2em] font-bold text-brand-gold">The Pillar of Success</div>
                         <h2 class="text-5xl md:text-7xl font-bold tracking-tight">Structured <br>Endurance.</h2>
                     </div>
-                    
+
                     <div class="space-y-8">
                         <div class="flex gap-6">
                             <div class="flex-shrink-0 w-12 h-12 rounded-full border border-brand-gold/30 flex items-center justify-center text-brand-gold font-bold">01</div>
@@ -299,8 +289,8 @@
                 </div>
 
                 <div class="relative reveal" style="transition-delay: 200ms">
-                    <div class="double-bezel p-2 bg-white/5 ring-white/10 dark:bg-white/10">
-                        <div class="double-bezel-inner bg-brand-grey/20 aspect-[4/3] relative overflow-hidden">
+                    <div class="flat-card p-2 bg-white/5 border-white/10">
+                        <div class="rounded-2xl bg-brand-grey/20 aspect-[4/3] relative overflow-hidden">
                              <img src="logo.jpeg" class="absolute w-[200%] max-w-none h-auto top-[-10%] left-[-5%] dark:opacity-80" style="clip-path: inset(45% 55% 5% 5%); transform: scale(2.2); transform-origin: 15% 75%;">
                              <!-- The above is a rough crop for the Strategy illustration -->
                              <img src="logo.jpeg" class="w-full h-full object-cover object-[15%_75%] scale-[1.8] dark:opacity-80" alt="Strategy Illustration">
@@ -314,8 +304,8 @@
         <!-- Action & Flow Section -->
         <section id="flow" class="py-24 md:py-40 px-6 max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-24 items-center">
             <div class="order-2 md:order-1 relative reveal">
-                <div class="double-bezel p-2">
-                    <div class="double-bezel-inner bg-brand-light/10 aspect-[4/3] relative overflow-hidden">
+                <div class="flat-card p-2">
+                    <div class="rounded-2xl bg-brand-light/10 aspect-[4/3] relative overflow-hidden">
                         <img src="logo.jpeg" class="w-full h-full object-cover object-[85%_75%] scale-[1.8] dark:opacity-80" alt="Action & Flow Illustration">
                     </div>
                 </div>
@@ -355,21 +345,21 @@
                     <p class="text-brand-grey font-medium text-lg dark:text-brand-grey/80">Let's build your enduring email strategy today.</p>
                 </div>
 
-                <div class="double-bezel text-left">
-                    <div class="double-bezel-inner p-8 md:p-12 space-y-8">
+                <div class="flat-card text-left">
+                    <div class="p-8 md:p-12 space-y-8">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                             <div class="space-y-2">
                                 <label class="text-[10px] uppercase tracking-widest font-bold text-brand-grey dark:text-brand-grey/80">Full Name</label>
-                                <input type="text" placeholder="John Doe" class="w-full bg-brand-cream/50 border border-brand-dark/5 rounded-2xl px-6 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-brand-teal/20 transition-all dark:bg-brand-dark/20 dark:border-white/5 dark:focus:ring-brand-light/20">
+                                <input type="text" placeholder="John Doe" class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-brand-teal/20 transition-all dark:bg-brand-dark dark:border-white/5 dark:focus:ring-brand-light/20">
                             </div>
                             <div class="space-y-2">
                                 <label class="text-[10px] uppercase tracking-widest font-bold text-brand-grey dark:text-brand-grey/80">Work Email</label>
-                                <input type="email" placeholder="john@company.com" class="w-full bg-brand-cream/50 border border-brand-dark/5 rounded-2xl px-6 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-brand-teal/20 transition-all dark:bg-brand-dark/20 dark:border-white/5 dark:focus:ring-brand-light/20">
+                                <input type="email" placeholder="john@company.com" class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-brand-teal/20 transition-all dark:bg-brand-dark dark:border-white/5 dark:focus:ring-brand-light/20">
                             </div>
                         </div>
                         <div class="space-y-2">
                             <label class="text-[10px] uppercase tracking-widest font-bold text-brand-grey dark:text-brand-grey/80">Message</label>
-                            <textarea rows="4" placeholder="Tell us about your strategy goals..." class="w-full bg-brand-cream/50 border border-brand-dark/5 rounded-2xl px-6 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-brand-teal/20 transition-all dark:bg-brand-dark/20 dark:border-white/5 dark:focus:ring-brand-light/20"></textarea>
+                            <textarea rows="4" placeholder="Tell us about your strategy goals..." class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-brand-teal/20 transition-all dark:bg-brand-dark dark:border-white/5 dark:focus:ring-brand-light/20"></textarea>
                         </div>
                         <button class="w-full bg-brand-teal text-white py-5 rounded-full font-bold text-sm hover:scale-[1.01] active:scale-[0.99] transition-all custom-bezier shadow-xl shadow-brand-teal/20 dark:bg-brand-light dark:text-brand-dark dark:shadow-brand-light/10">
                             Send Request
@@ -380,7 +370,7 @@
         </section>
     </main>
 
-    <footer class="py-12 border-t border-brand-dark/5 px-6 dark:border-white/5">
+    <footer class="py-12 border-t border-slate-200 px-6 dark:border-white/5">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
             <img src="easyemaillogo.jpeg" alt="Easy Email Flow" class="h-10 w-auto rounded-xl opacity-80 hover:opacity-100 transition-opacity dark:opacity-60 dark:hover:opacity-90">
             <div class="text-xs text-brand-grey font-medium uppercase tracking-widest dark:text-brand-grey/60">© 2026 EasyEmailFlow.com | Structuring Enduring Success</div>
