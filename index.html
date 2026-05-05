@@ -139,10 +139,10 @@
             <div class="absolute inset-0 z-0">
                 <video id="hero-video" 
                        src="pillars page.mp4" 
-                       class="w-full h-full object-cover scale-[1.3] opacity-50 dark:opacity-40"
+                       class="w-full h-full object-cover scale-[1.6] brightness-110 contrast-[1.05] dark:opacity-60"
                        muted playsinline preload="auto">
                 </video>
-                <div class="absolute inset-0 bg-gradient-to-b from-brand-cream/50 via-transparent to-brand-cream dark:from-brand-dark/50 dark:to-brand-dark"></div>
+                <div class="absolute inset-0 bg-gradient-to-b from-brand-cream/30 via-transparent to-brand-cream dark:from-brand-dark/30 dark:to-brand-dark"></div>
             </div>
 
             <div class="z-10 max-w-5xl mx-auto space-y-8">
@@ -434,8 +434,8 @@
         const heroSection = document.getElementById('hero');
 
         // Mapping scroll to video time
-        // Adjust the multiplier to change "slow motion" speed
-        const playbackRate = 0.4; 
+        // Increase playbackRate for faster initial shadow movement
+        const playbackRate = 0.8; 
 
         window.addEventListener('scroll', () => {
             const scrollY = window.scrollY;
@@ -446,8 +446,8 @@
                 const percentage = scrollY / heroHeight;
                 
                 // Set video time. Assuming video is long enough.
-                // If the video is 10s, this maps 100% scroll to video end or part of it.
                 if (video.duration) {
+                    // Map scroll immediately to video start and play through faster
                     video.currentTime = video.duration * percentage * playbackRate;
                 }
             }
