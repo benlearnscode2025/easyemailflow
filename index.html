@@ -137,10 +137,11 @@
         <section id="hero" class="min-h-[100dvh] flex flex-col items-center justify-center px-6 pt-32 pb-24 text-center relative overflow-hidden">
             <!-- Video Background -->
             <div class="absolute inset-0 z-0">
-                <video id="hero-video" 
-                       src="pillars page.mp4" 
+                <video id="hero-video"
+                       src="pillars page.mp4"
                        class="w-full h-full object-cover scale-[1.6] brightness-110 contrast-[1.05] dark:opacity-60"
-                       muted playsinline preload="auto">
+                       muted playsinline preload="auto"
+                       style="will-change: transform; transform: translateZ(0) scale(1.6);">
                 </video>
                 <div class="absolute inset-0 bg-gradient-to-b from-white/30 via-transparent to-white dark:from-brand-dark/30 dark:to-brand-dark"></div>
             </div>
@@ -385,38 +386,33 @@
     </footer>
 
     <script>
-        // Intersection Observer for reveal animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
+        // Reveal animations — GPU-friendly: no blur, only opacity + translate
+        const revealStyle = document.createElement('style');
+        revealStyle.innerHTML = `
+            .reveal {
+                opacity: 0;
+                transform: translateY(24px);
+                will-change: opacity, transform;
+                transition: opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+                            transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+            }
+            .reveal.active {
+                opacity: 1 !important;
+                transform: translateY(0) !important;
+            }
+        `;
+        document.head.appendChild(revealStyle);
 
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('active');
+                    observer.unobserve(entry.target);
                 }
             });
-        }, observerOptions);
+        }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
 
-        document.querySelectorAll('.reveal').forEach(el => {
-            el.style.opacity = '0';
-            el.style.transform = 'translateY(30px)';
-            el.style.filter = 'blur(10px)';
-            el.style.transition = 'all 1s cubic-bezier(0.32, 0.72, 0, 1)';
-            observer.observe(el);
-        });
-
-        // Add class to reveal elements
-        const style = document.createElement('style');
-        style.innerHTML = `
-            .reveal.active {
-                opacity: 1 !important;
-                transform: translateY(0) !important;
-                filter: blur(0) !important;
-            }
-        `;
-        document.head.appendChild(style);
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
         // Smooth scroll for nav
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -428,31 +424,29 @@
             });
         });
 
-        // Video Scrubbing Logic
+        // Video scrubbing — rAF-throttled for buttery smoothness
         const video = document.getElementById('hero-video');
         const heroSection = document.getElementById('hero');
+        const playbackRate = 0.8;
 
-        // Mapping scroll to video time
-        // Increase playbackRate for faster initial shadow movement
-        const playbackRate = 0.8; 
+        let rafPending = false;
+        let lastScrollY = window.scrollY;
 
         window.addEventListener('scroll', () => {
-            const scrollY = window.scrollY;
-            const heroHeight = heroSection.offsetHeight;
-            
-            if (scrollY < heroHeight) {
-                // Calculate percentage of scroll within hero
-                const percentage = scrollY / heroHeight;
-                
-                // Set video time. Assuming video is long enough.
-                if (video.duration) {
-                    // Map scroll immediately to video start and play through faster
-                    video.currentTime = video.duration * percentage * playbackRate;
-                }
+            lastScrollY = window.scrollY;
+            if (!rafPending) {
+                rafPending = true;
+                requestAnimationFrame(() => {
+                    rafPending = false;
+                    const heroHeight = heroSection.offsetHeight;
+                    if (lastScrollY < heroHeight && video.duration) {
+                        const pct = Math.min(lastScrollY / heroHeight, 1);
+                        video.currentTime = video.duration * pct * playbackRate;
+                    }
+                });
             }
-        });
+        }, { passive: true });
 
-        // Ensure video is ready to be scrubbed
         video.addEventListener('loadedmetadata', () => {
             video.currentTime = 0;
         });
