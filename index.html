@@ -102,49 +102,14 @@
             .reveal-card > div { transition: none !important; transform: none !important; }
         }
 
-        /* 3D tilted card — applied to a single card for emphasis */
-        .tilt-3d { perspective: 1800px; }
-        .tilt-3d > div {
-            transform: rotateY(-16deg) rotateX(10deg) translateZ(0);
-            transform-origin: 60% 50%;
-            transform-style: preserve-3d;
-            transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1),
-                        box-shadow 0.9s cubic-bezier(0.22, 1, 0.36, 1) !important;
-            box-shadow:
-                0 60px 90px -30px rgba(20, 38, 30, 0.45),
-                0 30px 50px -20px rgba(20, 38, 30, 0.30) !important;
-        }
-        .work-grid:has(.reveal-card:hover) .tilt-3d:not(:hover) > div {
-            transform: rotateY(-16deg) rotateX(10deg) scale(0.985) !important;
-        }
-        .tilt-3d:hover > div,
-        .tilt-3d:focus-within > div {
-            transform: rotateY(0deg) rotateX(0deg) translateY(-10px) scale(1.01) !important;
-            box-shadow:
-                0 50px 80px -25px rgba(20, 38, 30, 0.40),
-                0 20px 40px -15px rgba(20, 38, 30, 0.25) !important;
-        }
-        .tilt-3d h3 {
-            text-shadow:
-                0 1px 0 rgba(255, 255, 255, 0.18),
-                0 2px 6px rgba(0, 0, 0, 0.28),
-                0 4px 14px rgba(0, 0, 0, 0.18);
-        }
-        .tilt-3d .extra > div {
-            background-color: rgba(11, 11, 10, 0.10) !important;
-            box-shadow:
-                inset 0 1px 0 rgba(255, 255, 255, 0.10),
-                inset 0 -2px 6px rgba(0, 0, 0, 0.22),
-                0 4px 10px rgba(0, 0, 0, 0.20),
-                0 1px 2px rgba(0, 0, 0, 0.15);
-            color: rgba(246, 243, 236, 0.95);
-        }
-        .tilt-3d .arrow {
-            box-shadow:
-                inset 0 1px 0 rgba(255, 255, 255, 0.14),
-                inset 0 -2px 4px rgba(0, 0, 0, 0.25),
-                0 4px 10px rgba(0, 0, 0, 0.20);
-        }
+        /* Image-rendered card — uses pre-rendered 3D image */
+        .image-card { background: transparent !important; }
+        .image-card .render { transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1); will-change: transform; }
+        .reveal-card.image-card > div { box-shadow: none !important; transform: none !important; background: transparent !important; }
+        .reveal-card.image-card:hover > div { transform: none !important; box-shadow: none !important; }
+        .reveal-card.image-card:hover .render { transform: translateY(-10px) scale(1.015); }
+        .work-grid:has(.reveal-card:hover) .reveal-card.image-card:not(:hover) > div { opacity: 1 !important; transform: none !important; }
+        .work-grid:has(.reveal-card:hover) .reveal-card.image-card:not(:hover) .render { opacity: 0.55; transform: scale(0.985); }
         /* Marquee */
         @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
         .marquee-track { animation: marquee 38s linear infinite; }
@@ -236,25 +201,12 @@
             </div>
 
             <div class="work-grid grid grid-cols-1 md:grid-cols-12 gap-5">
-                <!-- Card 1 -->
-                <article class="reveal reveal-card tilt-3d md:col-span-7 group">
-                    <div class="p-1.5 rounded-[2rem] bg-brand-moss/10 ring-1 ring-brand-moss/15 h-full">
-                        <div class="rounded-[calc(2rem-0.375rem)] bg-brand-moss text-brand-cream p-8 md:p-10 h-full">
-                            <div class="flex items-start justify-between gap-6">
-                                <div>
-                                    <div class="text-[10px] uppercase tracking-[0.22em] text-brand-cream/70 font-semibold">01 — Stability</div>
-                                    <h3 class="mt-3 font-serif text-3xl md:text-5xl leading-[1.05]">Stability <em>first.</em></h3>
-                                </div>
-                                <span class="arrow shrink-0 w-10 h-10 rounded-full bg-brand-cream/15 flex items-center justify-center">
-                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M7 17L17 7M17 7H8M17 7v9"></path></svg>
-                                </span>
-                            </div>
-                            <div class="extra mt-6 grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm text-brand-cream/85">
-                                <div class="rounded-2xl px-4 py-3 bg-brand-cream/10">Deliverability</div>
-                                <div class="rounded-2xl px-4 py-3 bg-brand-cream/10">Compliance</div>
-                                <div class="rounded-2xl px-4 py-3 bg-brand-cream/10">Performance</div>
-                            </div>
-                        </div>
+                <!-- Card 1 — pre-rendered 3D image -->
+                <article class="reveal reveal-card image-card md:col-span-7 group" aria-label="Stability first">
+                    <div class="h-full flex items-center justify-center">
+                        <a href="#contact" class="render block w-full max-w-[640px]">
+                            <img src="stability-card.jpeg" alt="Stability first — Deliverability, Compliance, Performance" class="w-full h-auto select-none" draggable="false">
+                        </a>
                     </div>
                 </article>
 
