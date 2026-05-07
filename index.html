@@ -10,7 +10,6 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-
       gtag('config', 'G-41R44LP14P');
     </script>
     <script type="text/javascript">
@@ -25,8 +24,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/framer-motion@11.0.8/dist/framer-motion.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             darkMode: 'media',
@@ -34,98 +32,80 @@
                 extend: {
                     colors: {
                         brand: {
-                            dark: '#0F172A',
-                            primary: '#2563EB',
-                            accent: '#60A5FA',
-                            grey: '#64748B',
-                            light: '#E2E8F0',
-                            cream: '#FFFFFF'
+                            ink: '#0B0B0A',
+                            cream: '#F6F3EC',
+                            sand: '#EDE8DC',
+                            stone: '#8A847A',
+                            moss: '#1F4D3F',
+                            sage: '#7C9082',
                         }
                     },
                     fontFamily: {
                         sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        serif: ['"Instrument Serif"', 'serif'],
                     },
-                    borderRadius: {
-                        '4xl': '2rem',
-                    },
-                    animation: {
-                        'float': 'float 6s ease-in-out infinite',
-                        'spin-slow': 'spin 12s linear infinite',
-                    },
-                    keyframes: {
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-20px)' },
-                        }
-                    }
+                    borderRadius: { '4xl': '2rem' }
                 }
             }
         }
     </script>
     <style>
+        html, body { background: #F6F3EC; }
         .glass {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            background: rgba(246, 243, 236, 0.72);
+            backdrop-filter: blur(14px) saturate(140%);
+            -webkit-backdrop-filter: blur(14px) saturate(140%);
         }
-        @media (prefers-color-scheme: dark) {
-            .glass {
-                background: rgba(15, 23, 42, 0.8);
-            }
+        .ease-soft { transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+        .ease-spring { transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .grain {
+            position: fixed; inset: 0; z-index: 50; pointer-events: none; opacity: 0.035;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
         }
-        .flat-card {
-            @apply border border-slate-100 bg-white rounded-3xl overflow-hidden dark:border-white/5 dark:bg-slate-900/50;
+        /* Pillar reveal */
+        .pillar-path { stroke-dasharray: 1; stroke-dashoffset: 1; pathLength: 1; }
+        .pillar.in .pillar-path {
+            animation: draw 1.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
         }
-        #nav-pill {
-            border-radius: 9999px !important;
-            overflow: hidden !important;
-            @apply border border-slate-100 dark:border-white/5;
-        }
-        .noise {
-            position: fixed;
-            inset: 0;
-            z-index: 50;
-            pointer-events: none;
-            opacity: 0.02;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-        }
-        #nav-pill {
-            border-radius: 9999px !important;
-            overflow: hidden !important;
-        }
-        .edit-mode-active [contenteditable="true"]:hover {
-            outline: 2px dashed #2563EB;
-            outline-offset: 4px;
-        }
-        .custom-bezier {
-            transition-timing-function: cubic-bezier(0.32, 0.72, 0, 1);
-        }
+        @keyframes draw { to { stroke-dashoffset: 0; } }
+        .pillar { transform: translateY(40px); opacity: 0; transition: transform 1.4s cubic-bezier(0.22,1,0.36,1), opacity 1.4s cubic-bezier(0.22,1,0.36,1); }
+        .pillar.in { transform: translateY(0); opacity: 1; }
+        /* Reveal on scroll */
+        .reveal { opacity: 0; transform: translateY(28px); will-change: opacity, transform;
+            transition: opacity 0.9s cubic-bezier(0.22,1,0.36,1), transform 0.9s cubic-bezier(0.22,1,0.36,1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        /* Expanding card */
+        .reveal-card .extra { max-height: 0; opacity: 0; transform: translateY(8px);
+            transition: max-height 0.7s cubic-bezier(0.22,1,0.36,1), opacity 0.5s ease, transform 0.7s cubic-bezier(0.22,1,0.36,1); overflow: hidden; }
+        .reveal-card:hover .extra,
+        .reveal-card:focus-within .extra { max-height: 280px; opacity: 1; transform: translateY(0); }
+        .reveal-card .arrow { transition: transform 0.6s cubic-bezier(0.22,1,0.36,1); }
+        .reveal-card:hover .arrow { transform: translate(2px, -2px); }
+        /* Marquee */
+        @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+        .marquee-track { animation: marquee 38s linear infinite; }
     </style>
 </head>
-<body class="bg-brand-cream text-brand-dark font-sans selection:bg-brand-primary selection:text-white overflow-x-hidden dark:bg-brand-dark dark:text-brand-cream">
-    <!-- Live Edit Toggle -->
-    <div class="fixed bottom-6 right-6 z-[100] flex items-center gap-3">
-        <a href="edits.html" class="w-12 h-12 bg-brand-dark text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all custom-bezier group dark:bg-brand-cream dark:text-brand-dark">
-            <svg class="w-5 h-5 group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
-        </a>
-    </div>
+<body class="text-brand-ink font-sans selection:bg-brand-moss selection:text-brand-cream antialiased overflow-x-hidden">
+
+    <div class="grain"></div>
 
     <!-- Navigation -->
-    <nav class="fixed top-6 left-0 right-0 z-[60] flex justify-center px-4 pointer-events-none">
-        <div id="nav-pill" class="glass pointer-events-auto">
-            <div class="px-6 py-2 flex items-center gap-8">
-                <a href="#" class="custom-bezier hover:scale-105 transition-transform flex items-center">
-                    <img src="easyemaillogonobackground.png" alt="Easy Email Flow" class="h-10 w-auto">
+    <nav class="fixed top-5 left-0 right-0 z-[60] flex justify-center px-4 pointer-events-none">
+        <div class="glass rounded-full ring-1 ring-brand-ink/10 pointer-events-auto">
+            <div class="px-5 py-2 flex items-center gap-7">
+                <a href="#" class="flex items-center">
+                    <img src="easyemaillogonobackground.png" alt="Easy Email Flow" class="h-8 w-auto">
                 </a>
-                <div class="hidden md:flex items-center gap-6">
-                    <a href="#services" class="text-xs font-medium uppercase tracking-widest hover:text-brand-primary transition-colors custom-bezier dark:hover:text-brand-accent">Services</a>
-                    <a href="#strategy" class="text-xs font-medium uppercase tracking-widest hover:text-brand-primary transition-colors custom-bezier dark:hover:text-brand-accent">Strategy</a>
-                    <a href="#flow" class="text-xs font-medium uppercase tracking-widest hover:text-brand-primary transition-colors custom-bezier dark:hover:text-brand-accent">The Flow</a>   
+                <div class="hidden md:flex items-center gap-6 text-[11px] uppercase tracking-[0.18em] font-semibold">
+                    <a href="#work" class="hover:text-brand-moss transition-colors">Work</a>
+                    <a href="#process" class="hover:text-brand-moss transition-colors">Process</a>
+                    <a href="#contact" class="hover:text-brand-moss transition-colors">Contact</a>
                 </div>
-                <a href="#contact" class="group flex items-center gap-2 bg-brand-primary text-white px-4 py-1.5 rounded-full text-xs font-semibold hover:scale-[1.02] active:scale-[0.98] transition-all custom-bezier dark:bg-brand-accent dark:text-brand-dark">
-                    Start Now
-                    <span class="w-5 h-5 rounded-full bg-white/10 flex items-center justify-center group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform custom-bezier dark:bg-brand-dark/10">
-                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                <a href="#contact" class="group flex items-center gap-2 bg-brand-ink text-brand-cream pl-4 pr-1.5 py-1.5 rounded-full text-[11px] font-semibold uppercase tracking-wider hover:scale-[1.02] active:scale-[0.98] transition-transform ease-soft duration-300">
+                    Start
+                    <span class="w-6 h-6 rounded-full bg-brand-cream/15 flex items-center justify-center group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform ease-soft">
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                     </span>
                 </a>
             </div>
@@ -133,324 +113,303 @@
     </nav>
 
     <main>
-        <!-- Hero Section -->
-        <section id="hero" class="min-h-[100dvh] flex flex-col items-center justify-center px-6 pt-32 pb-24 text-center relative overflow-hidden">
-            <!-- Video Background -->
-            <div class="absolute inset-0 z-0">
-                <video id="hero-video"
-                       src="pillars page.mp4"
-                       class="w-full h-full object-cover scale-[1.6] brightness-75 contrast-[1.25] saturate-[1.1] dark:opacity-60"
-                       muted playsinline preload="auto"
-                       style="will-change: transform; transform: translateZ(0) scale(1.6);">
-                </video>
-                <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-white dark:from-transparent dark:to-brand-dark"></div>
-                <div class="absolute inset-0 bg-gradient-to-t from-black/30 via-black/10 to-transparent dark:from-black/50"></div>
-            </div>
+        <!-- Hero -->
+        <section id="hero" class="relative min-h-[100dvh] flex items-end justify-center px-6 pt-32 pb-16 overflow-hidden">
 
-            <div class="z-10 max-w-5xl mx-auto space-y-8">
-                <h1 class="text-6xl md:text-8xl lg:text-9xl font-extrabold tracking-tight leading-[0.9] reveal" style="transition-delay: 100ms">
-                    Easy Email <span class="text-brand-primary dark:text-brand-accent">Flow.</span>
+            <!-- Decorative SVG pillars -->
+            <svg id="pillar-left" class="pillar absolute left-0 bottom-0 h-[88%] md:h-[92%] w-auto pointer-events-none text-brand-moss/80" viewBox="0 0 220 900" fill="none" preserveAspectRatio="xMinYMax meet" aria-hidden="true">
+                <g stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round">
+                    <!-- Capital scroll (Ionic) -->
+                    <path class="pillar-path" d="M30 130 C 30 80, 70 60, 100 80 C 125 96, 130 130, 110 150 C 95 165, 75 158, 75 138 C 75 122, 90 116, 100 124"/>
+                    <path class="pillar-path" d="M190 130 C 190 80, 150 60, 120 80 C 95 96, 90 130, 110 150 C 125 165, 145 158, 145 138 C 145 122, 130 116, 120 124"/>
+                    <!-- Capital base line -->
+                    <path class="pillar-path" d="M20 175 H 200"/>
+                    <path class="pillar-path" d="M28 188 H 192"/>
+                    <!-- Shaft top molding -->
+                    <path class="pillar-path" d="M40 205 H 180"/>
+                    <!-- Shaft fluting -->
+                    <path class="pillar-path" d="M55 215 V 800"/>
+                    <path class="pillar-path" d="M75 215 V 800"/>
+                    <path class="pillar-path" d="M95 215 V 800"/>
+                    <path class="pillar-path" d="M115 215 V 800"/>
+                    <path class="pillar-path" d="M135 215 V 800"/>
+                    <path class="pillar-path" d="M155 215 V 800"/>
+                    <!-- Base mouldings -->
+                    <path class="pillar-path" d="M40 815 H 180"/>
+                    <path class="pillar-path" d="M28 832 H 192"/>
+                    <path class="pillar-path" d="M18 850 H 202"/>
+                    <path class="pillar-path" d="M10 880 H 210"/>
+                </g>
+            </svg>
+
+            <svg id="pillar-right" class="pillar absolute right-0 bottom-0 h-[88%] md:h-[92%] w-auto pointer-events-none text-brand-moss/80" viewBox="0 0 220 900" fill="none" preserveAspectRatio="xMaxYMax meet" aria-hidden="true">
+                <g stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round">
+                    <path class="pillar-path" d="M30 130 C 30 80, 70 60, 100 80 C 125 96, 130 130, 110 150 C 95 165, 75 158, 75 138 C 75 122, 90 116, 100 124"/>
+                    <path class="pillar-path" d="M190 130 C 190 80, 150 60, 120 80 C 95 96, 90 130, 110 150 C 125 165, 145 158, 145 138 C 145 122, 130 116, 120 124"/>
+                    <path class="pillar-path" d="M20 175 H 200"/>
+                    <path class="pillar-path" d="M28 188 H 192"/>
+                    <path class="pillar-path" d="M40 205 H 180"/>
+                    <path class="pillar-path" d="M55 215 V 800"/>
+                    <path class="pillar-path" d="M75 215 V 800"/>
+                    <path class="pillar-path" d="M95 215 V 800"/>
+                    <path class="pillar-path" d="M115 215 V 800"/>
+                    <path class="pillar-path" d="M135 215 V 800"/>
+                    <path class="pillar-path" d="M155 215 V 800"/>
+                    <path class="pillar-path" d="M40 815 H 180"/>
+                    <path class="pillar-path" d="M28 832 H 192"/>
+                    <path class="pillar-path" d="M18 850 H 202"/>
+                    <path class="pillar-path" d="M10 880 H 210"/>
+                </g>
+            </svg>
+
+            <!-- Soft top-down fade so pillars feel grounded -->
+            <div class="absolute inset-0 bg-gradient-to-b from-brand-cream via-transparent to-brand-cream pointer-events-none"></div>
+
+            <div class="relative z-10 max-w-5xl mx-auto text-center pb-12 md:pb-24">
+                <h1 class="reveal font-serif text-[16vw] md:text-[10vw] lg:text-[9rem] leading-[0.92] tracking-tight">
+                    Easy Email <em class="not-italic text-brand-moss">Flow.</em>
                 </h1>
-
-                <p class="text-lg md:text-xl text-brand-grey max-w-2xl mx-auto font-medium reveal dark:text-brand-grey/80" style="transition-delay: 200ms">
-                    Structuring Enduring Success through Forged Core Strategy. We are a boutique B2B agency.
+                <p class="reveal mt-6 text-base md:text-lg text-brand-stone max-w-md mx-auto" style="transition-delay:120ms">
+                    A boutique email studio for B2B brands.
                 </p>
-
-                <div class="flex flex-col md:flex-row items-center justify-center gap-4 pt-4 reveal" style="transition-delay: 300ms">
-                    <a href="#contact" class="group relative inline-flex items-center gap-3 bg-brand-dark text-white px-8 py-4 rounded-full text-sm font-bold hover:scale-[1.02] active:scale-[0.98] transition-all custom-bezier shadow-2xl shadow-brand-dark/20 dark:bg-brand-cream dark:text-brand-dark dark:shadow-brand-cream/5">
+                <div class="reveal mt-10 flex justify-center" style="transition-delay:200ms">
+                    <a href="#contact" class="group inline-flex items-center gap-2 bg-brand-ink text-brand-cream pl-7 pr-2 py-2 rounded-full text-sm font-semibold tracking-wide hover:scale-[1.02] active:scale-[0.98] transition-transform ease-soft duration-300">
                         Forge Your Strategy
-                        <span class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center group-hover:translate-x-1 transition-transform custom-bezier dark:bg-brand-dark/10">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        <span class="w-9 h-9 rounded-full bg-brand-cream/12 flex items-center justify-center group-hover:translate-x-1 group-hover:-translate-y-[1px] transition-transform ease-soft">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M7 17L17 7M17 7H8M17 7v9"></path></svg>
                         </span>
                     </a>
-                    <a href="#services" class="text-sm font-bold border-b-2 border-brand-dark/10 hover:border-brand-primary transition-colors py-1 dark:border-white/10 dark:hover:border-brand-accent">Explore Services</a>
                 </div>
             </div>
 
-            <div class="mt-24 z-10 reveal" style="transition-delay: 400ms">
-                <div class="flat-card max-w-4xl mx-auto p-4">
-                    <img src="logo.jpeg" alt="Easy Email Flow Concept" class="w-full h-auto rounded-2xl object-cover hover:scale-[1.01] transition-transform duration-1000 dark:opacity-90">
-                </div>
+            <!-- Scroll cue -->
+            <div class="absolute bottom-6 left-1/2 -translate-x-1/2 text-[10px] uppercase tracking-[0.3em] text-brand-stone/70 reveal" style="transition-delay:380ms">scroll</div>
+        </section>
+
+        <!-- Marquee strip -->
+        <section class="border-y border-brand-ink/10 overflow-hidden py-5 bg-brand-sand/40">
+            <div class="flex gap-16 marquee-track whitespace-nowrap font-serif text-2xl md:text-3xl text-brand-ink/70">
+                <span>Strategy</span><span>·</span><span>Deliverability</span><span>·</span><span>Lifecycle</span><span>·</span><span>Design</span><span>·</span><span>Klaviyo</span><span>·</span><span>HubSpot</span><span>·</span><span>Iterable</span><span>·</span>
+                <span>Strategy</span><span>·</span><span>Deliverability</span><span>·</span><span>Lifecycle</span><span>·</span><span>Design</span><span>·</span><span>Klaviyo</span><span>·</span><span>HubSpot</span><span>·</span><span>Iterable</span><span>·</span>
             </div>
         </section>
-        <!-- Services Section (Bento) -->
-        <section id="services" class="py-24 md:py-40 px-6 max-w-7xl mx-auto">
-            <div class="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
-                <div class="space-y-4">
-                    <div class="text-[10px] uppercase tracking-[0.2em] font-bold text-brand-primary dark:text-brand-accent">Our Foundation</div>
-                    <h2 class="text-4xl md:text-6xl font-bold tracking-tight">Comprehensive <br>Email Management.</h2>
-                </div>
-                <p class="text-brand-grey max-w-md font-medium dark:text-brand-grey/80">
-                    We don't just send emails. We build the architecture of your customer lifecycle, ensuring every touchpoint drives results.
-                </p>
+
+        <!-- Work / Bento -->
+        <section id="work" class="py-28 md:py-44 px-6 max-w-7xl mx-auto">
+            <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-14 reveal">
+                <h2 class="font-serif text-5xl md:text-7xl tracking-tight leading-[1.0]">What we build.</h2>
+                <p class="text-brand-stone max-w-xs text-sm">Hover any block to expand.</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
-                <!-- Large Card -->
-                <div class="md:col-span-8 group reveal">
-                    <div class="flat-card p-8 h-full flex flex-col justify-between hover:bg-slate-50 transition-colors custom-bezier dark:hover:bg-slate-800/30">
-                        <div class="space-y-4">
-                            <div class="w-12 h-12 rounded-2xl bg-brand-primary/10 flex items-center justify-center text-brand-primary group-hover:scale-110 transition-transform custom-bezier dark:bg-brand-accent/10 dark:text-brand-accent">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                            </div>
-                            <h3 class="text-2xl font-bold">Forged Core Strategy</h3>
-                            <p class="text-brand-grey max-w-sm dark:text-brand-grey/80">High-level strategic planning that aligns your email channels with your broader business objectives.</p>
-                        </div>
-                        <div class="mt-12 flex flex-wrap gap-2">
-                            <span class="px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-[10px] font-bold uppercase tracking-wider dark:bg-slate-800 dark:border-white/5">Audits</span>
-                            <span class="px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-[10px] font-bold uppercase tracking-wider dark:bg-slate-800 dark:border-white/5">Roadmaps</span>
-                            <span class="px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-[10px] font-bold uppercase tracking-wider dark:bg-slate-800 dark:border-white/5">Tech-Stack</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Small Card -->
-                <div class="md:col-span-4 group reveal" style="transition-delay: 100ms">
-                    <div class="flat-card p-8 h-full bg-brand-dark text-white hover:bg-slate-800 transition-colors custom-bezier">
-                        <div class="space-y-4">
-                            <div class="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center text-brand-accent">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04Custom-bezierm2.77 7.647a11.996 11.996 0 002.273 6.63l.067.12a8.959 8.959 0 006.4 4.897 8.959 8.959 0 006.4-4.897l.067-.12a11.996 11.996 0 002.273-6.63l-.014-.247a11.955 11.955 0 01-8.618-3.041z"></path></svg>
-                            </div>
-                            <h3 class="text-2xl font-bold">Performance First</h3>
-                            <p class="text-white/60">Ensuring deliverability, compliance, and consistent performance across all ESPs.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Small Card 2 -->
-                <div class="md:col-span-4 group reveal" style="transition-delay: 200ms">
-                    <div class="flat-card p-8 h-full bg-slate-50 border border-slate-200 hover:bg-slate-100 transition-colors custom-bezier dark:bg-slate-900/50 dark:border-white/5">
-                        <div class="space-y-4">
-                            <div class="w-12 h-12 rounded-2xl bg-brand-primary/10 flex items-center justify-center text-brand-primary dark:text-brand-accent">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path></svg>
-                            </div>
-                            <h3 class="text-2xl font-bold">Bespoke Design</h3>
-                            <p class="text-brand-grey dark:text-brand-grey/80">High-conversion, premium aesthetic templates tailored to your brand's unique identity.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Large Card 2 -->
-                <div class="md:col-span-8 group reveal" style="transition-delay: 300ms">
-                    <div class="flat-card p-8 h-full bg-brand-primary text-white flex flex-col md:flex-row items-center gap-12 hover:bg-blue-700 transition-colors custom-bezier">
-                        <div class="space-y-4 flex-1">
-                            <div class="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center text-brand-light">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                            </div>
-                            <h3 class="text-2xl font-bold">Lifecycle Automation</h3>
-                            <p class="text-white/70">Flows that work while you sleep. Welcome series, re-engagement, and predictive post-purchase sequences.</p>
-                        </div>
-                        <div class="flex-1 w-full flex items-center justify-center">
-                            <div class="relative w-full aspect-square max-w-[240px] border border-white/10 rounded-full flex items-center justify-center animate-spin-slow">
-                                <div class="absolute inset-4 border border-white/20 rounded-full"></div>
-                                <div class="absolute inset-8 border border-white/30 rounded-full"></div>
-                                <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center text-brand-primary shadow-xl dark:bg-brand-accent dark:text-brand-primary">
-                                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-5">
+                <!-- Card 1 -->
+                <article class="reveal reveal-card md:col-span-7 group">
+                    <div class="p-1.5 rounded-[2rem] bg-brand-ink/[0.04] ring-1 ring-brand-ink/5">
+                        <div class="rounded-[calc(2rem-0.375rem)] bg-brand-cream p-8 md:p-10 h-full ring-1 ring-brand-ink/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.6)]">
+                            <div class="flex items-start justify-between gap-6">
+                                <div>
+                                    <div class="text-[10px] uppercase tracking-[0.22em] text-brand-moss font-semibold">01 — Strategy</div>
+                                    <h3 class="mt-3 font-serif text-3xl md:text-5xl leading-[1.05]">Engage <em class="text-brand-moss">the audience.</em></h3>
                                 </div>
+                                <span class="arrow shrink-0 w-10 h-10 rounded-full bg-brand-ink text-brand-cream flex items-center justify-center">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M7 17L17 7M17 7H8M17 7v9"></path></svg>
+                                </span>
+                            </div>
+                            <div class="extra mt-6 grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
+                                <div class="rounded-2xl px-4 py-3 bg-brand-sand/70">Audits</div>
+                                <div class="rounded-2xl px-4 py-3 bg-brand-sand/70">Roadmaps</div>
+                                <div class="rounded-2xl px-4 py-3 bg-brand-sand/70">Tech-stack</div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </article>
+
+                <!-- Card 2 -->
+                <article class="reveal reveal-card md:col-span-5 group" style="transition-delay:80ms">
+                    <div class="p-1.5 rounded-[2rem] bg-brand-moss/10 ring-1 ring-brand-moss/15 h-full">
+                        <div class="rounded-[calc(2rem-0.375rem)] bg-brand-moss text-brand-cream p-8 md:p-10 h-full">
+                            <div class="flex items-start justify-between gap-6">
+                                <div>
+                                    <div class="text-[10px] uppercase tracking-[0.22em] text-brand-cream/70 font-semibold">02 — Stability</div>
+                                    <h3 class="mt-3 font-serif text-3xl md:text-5xl leading-[1.05]">Stability <em>first.</em></h3>
+                                </div>
+                                <span class="arrow shrink-0 w-10 h-10 rounded-full bg-brand-cream/15 flex items-center justify-center">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M7 17L17 7M17 7H8M17 7v9"></path></svg>
+                                </span>
+                            </div>
+                            <div class="extra mt-6 space-y-2 text-sm text-brand-cream/85">
+                                <div class="rounded-2xl px-4 py-3 bg-brand-cream/10">Deliverability</div>
+                                <div class="rounded-2xl px-4 py-3 bg-brand-cream/10">Compliance</div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Card 3 -->
+                <article class="reveal reveal-card md:col-span-5 group" style="transition-delay:160ms">
+                    <div class="p-1.5 rounded-[2rem] bg-brand-ink/[0.04] ring-1 ring-brand-ink/5 h-full">
+                        <div class="rounded-[calc(2rem-0.375rem)] bg-brand-cream p-8 md:p-10 h-full ring-1 ring-brand-ink/5">
+                            <div class="flex items-start justify-between gap-6">
+                                <div>
+                                    <div class="text-[10px] uppercase tracking-[0.22em] text-brand-moss font-semibold">03 — Flows</div>
+                                    <h3 class="mt-3 font-serif text-3xl md:text-5xl leading-[1.05]">Foundational <em class="text-brand-moss">automations.</em></h3>
+                                </div>
+                                <span class="arrow shrink-0 w-10 h-10 rounded-full bg-brand-ink text-brand-cream flex items-center justify-center">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M7 17L17 7M17 7H8M17 7v9"></path></svg>
+                                </span>
+                            </div>
+                            <div class="extra mt-6 space-y-2 text-sm">
+                                <div class="rounded-2xl px-4 py-3 bg-brand-sand/70">Welcome</div>
+                                <div class="rounded-2xl px-4 py-3 bg-brand-sand/70">Re-engagement</div>
+                                <div class="rounded-2xl px-4 py-3 bg-brand-sand/70">Post-purchase</div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Card 4 -->
+                <article class="reveal reveal-card md:col-span-7 group" style="transition-delay:240ms">
+                    <div class="p-1.5 rounded-[2rem] bg-brand-ink ring-1 ring-brand-ink h-full">
+                        <div class="rounded-[calc(2rem-0.375rem)] bg-brand-ink text-brand-cream p-8 md:p-10 h-full">
+                            <div class="flex items-start justify-between gap-6">
+                                <div>
+                                    <div class="text-[10px] uppercase tracking-[0.22em] text-brand-sage font-semibold">04 — Design</div>
+                                    <h3 class="mt-3 font-serif text-3xl md:text-5xl leading-[1.05]">Bespoke <em class="text-brand-sage">templates.</em></h3>
+                                </div>
+                                <span class="arrow shrink-0 w-10 h-10 rounded-full bg-brand-cream text-brand-ink flex items-center justify-center">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M7 17L17 7M17 7H8M17 7v9"></path></svg>
+                                </span>
+                            </div>
+                            <div class="extra mt-6 grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
+                                <div class="rounded-2xl px-4 py-3 bg-brand-cream/8 border border-brand-cream/10">On-brand</div>
+                                <div class="rounded-2xl px-4 py-3 bg-brand-cream/8 border border-brand-cream/10">Modular</div>
+                                <div class="rounded-2xl px-4 py-3 bg-brand-cream/8 border border-brand-cream/10">High-converting</div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
             </div>
         </section>
 
-        <!-- Strategy Section (Editorial Split) -->
-        <section id="strategy" class="py-24 md:py-40 bg-brand-dark text-white relative overflow-hidden">
-            <div class="absolute top-0 right-0 w-full h-full opacity-5 pointer-events-none">
-                <svg viewBox="0 0 100 100" class="w-full h-full text-brand-accent fill-current">
-                    <circle cx="100" cy="0" r="80" />
-                </svg>
+        <!-- Process -->
+        <section id="process" class="py-28 md:py-44 px-6 max-w-6xl mx-auto">
+            <div class="reveal mb-16">
+                <div class="text-[10px] uppercase tracking-[0.24em] text-brand-moss font-semibold">Process</div>
+                <h2 class="mt-3 font-serif text-5xl md:text-7xl tracking-tight leading-[1.0]">Three steps. <em class="text-brand-moss">No noise.</em></h2>
             </div>
 
-            <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-24 items-center">
-                <div class="space-y-12 reveal">
-                    <div class="space-y-4">
-                        <div class="text-[10px] uppercase tracking-[0.2em] font-bold text-brand-accent">The Pillar of Success</div>
-                        <h2 class="text-5xl md:text-7xl font-bold tracking-tight">Structured <br>Endurance.</h2>
+            <ol class="grid grid-cols-1 md:grid-cols-3 gap-px bg-brand-ink/10 rounded-[2rem] overflow-hidden ring-1 ring-brand-ink/10">
+                <li class="reveal bg-brand-cream p-10 min-h-[260px] flex flex-col justify-between">
+                    <div class="font-serif text-6xl text-brand-moss">01</div>
+                    <div>
+                        <h4 class="font-serif text-2xl">Forge the base</h4>
+                        <p class="mt-2 text-sm text-brand-stone">Audit + roadmap.</p>
                     </div>
-
-                    <div class="space-y-8">
-                        <div class="flex gap-6">
-                            <div class="flex-shrink-0 w-12 h-12 rounded-full border border-brand-accent/30 flex items-center justify-center text-brand-accent font-bold">01</div>
-                            <div class="space-y-2">
-                                <h4 class="text-xl font-bold">Forge the Base</h4>
-                                <p class="text-white/60">We audit every aspect of your current email presence to identify structural weaknesses.</p>
-                            </div>
-                        </div>
-                        <div class="flex gap-6">
-                            <div class="flex-shrink-0 w-12 h-12 rounded-full border border-brand-accent/30 flex items-center justify-center text-brand-accent font-bold">02</div>
-                            <div class="space-y-2">
-                                <h4 class="text-xl font-bold">Enable the Flow</h4>
-                                <p class="text-white/60">Automated systems are deployed to create a frictionless journey for your customers.</p>
-                            </div>
-                        </div>
-                        <div class="flex gap-6">
-                            <div class="flex-shrink-0 w-12 h-12 rounded-full border border-brand-accent/30 flex items-center justify-center text-brand-accent font-bold">03</div>
-                            <div class="space-y-2">
-                                <h4 class="text-xl font-bold">Scale Success</h4>
-                                <p class="text-white/60">Continuous optimization ensures your success is sustainable and enduring.</p>
-                            </div>
-                        </div>
+                </li>
+                <li class="reveal bg-brand-cream p-10 min-h-[260px] flex flex-col justify-between" style="transition-delay:100ms">
+                    <div class="font-serif text-6xl text-brand-moss">02</div>
+                    <div>
+                        <h4 class="font-serif text-2xl">Enable the flow</h4>
+                        <p class="mt-2 text-sm text-brand-stone">Deploy lifecycle systems.</p>
                     </div>
-                </div>
-
-                <div class="relative reveal" style="transition-delay: 200ms">
-                    <div class="flat-card p-2 bg-white/5 border-white/10">
-                        <div class="rounded-2xl bg-brand-grey/20 aspect-[4/3] relative overflow-hidden">
-                             <img src="logo.jpeg" class="absolute w-[200%] max-w-none h-auto top-[-10%] left-[-5%] dark:opacity-80" style="clip-path: inset(45% 55% 5% 5%); transform: scale(2.2); transform-origin: 15% 75%;">
-                             <img src="logo.jpeg" class="w-full h-full object-cover object-[15%_75%] scale-[1.8] dark:opacity-80" alt="Strategy Illustration">
-                        </div>
+                </li>
+                <li class="reveal bg-brand-cream p-10 min-h-[260px] flex flex-col justify-between" style="transition-delay:200ms">
+                    <div class="font-serif text-6xl text-brand-moss">03</div>
+                    <div>
+                        <h4 class="font-serif text-2xl">Scale</h4>
+                        <p class="mt-2 text-sm text-brand-stone">Optimize, repeat.</p>
                     </div>
-                    <div class="absolute -bottom-12 -left-12 w-48 h-48 bg-brand-primary/20 rounded-full blur-3xl animate-float dark:bg-brand-primary/10"></div>
-                </div>
-            </div>
+                </li>
+            </ol>
         </section>
 
-        <!-- Action & Flow Section -->
-        <section id="flow" class="py-24 md:py-40 px-6 max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-24 items-center">
-            <div class="order-2 md:order-1 relative reveal">
-                <div class="flat-card p-2">
-                    <div class="rounded-2xl bg-brand-light/10 aspect-[4/3] relative overflow-hidden">
-                        <img src="logo.jpeg" class="w-full h-full object-cover object-[85%_75%] scale-[1.8] dark:opacity-80" alt="Action & Flow Illustration">
-                    </div>
-                </div>
-                <div class="absolute -top-12 -right-12 w-48 h-48 bg-brand-primary/10 rounded-full blur-3xl animate-pulse"></div>
+        <!-- Contact -->
+        <section id="contact" class="py-28 md:py-44 px-6 max-w-3xl mx-auto">
+            <div class="reveal text-center mb-12">
+                <h2 class="font-serif text-5xl md:text-7xl tracking-tight leading-[1.0]">Ready to <em class="text-brand-moss">flow?</em></h2>
             </div>
-
-            <div class="order-1 md:order-2 space-y-8 reveal" style="transition-delay: 200ms">
-                <div class="space-y-4">
-                    <div class="text-[10px] uppercase tracking-[0.2em] font-bold text-brand-primary dark:text-brand-accent">The Momentum</div>
-                    <h2 class="text-5xl md:text-7xl font-bold tracking-tight">Kinetic <br>Success.</h2>
-                </div>
-                <p class="text-brand-grey text-lg font-medium dark:text-brand-grey/80">
-                    Our "Action & Flow" phase is where strategy meets execution. We deploy high-velocity campaigns and automated funnels that turn momentum into success.
-                </p>
-                <ul class="space-y-4">
-                    <li class="flex items-center gap-4">
-                        <span class="w-6 h-6 rounded-full bg-brand-primary text-white flex items-center justify-center dark:bg-brand-accent dark:text-brand-dark">
-                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+            <div class="reveal p-1.5 rounded-[2rem] bg-brand-ink/[0.04] ring-1 ring-brand-ink/5" style="transition-delay:120ms">
+                <form class="rounded-[calc(2rem-0.375rem)] bg-brand-cream p-8 md:p-10 space-y-5 ring-1 ring-brand-ink/5">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <input type="text" placeholder="Name" class="w-full bg-brand-sand/50 border border-brand-ink/5 rounded-2xl px-5 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-brand-moss/30 transition-all">
+                        <input type="email" placeholder="Work email" class="w-full bg-brand-sand/50 border border-brand-ink/5 rounded-2xl px-5 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-brand-moss/30 transition-all">
+                    </div>
+                    <textarea rows="3" placeholder="What are you working on?" class="w-full bg-brand-sand/50 border border-brand-ink/5 rounded-2xl px-5 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-brand-moss/30 transition-all"></textarea>
+                    <button class="group w-full bg-brand-ink text-brand-cream py-4 rounded-full font-semibold text-sm tracking-wide flex items-center justify-center gap-2 hover:scale-[1.005] active:scale-[0.99] transition-transform ease-soft duration-300">
+                        Send
+                        <span class="w-7 h-7 rounded-full bg-brand-cream/12 flex items-center justify-center group-hover:translate-x-0.5 group-hover:-translate-y-[1px] transition-transform ease-soft">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M7 17L17 7M17 7H8M17 7v9"></path></svg>
                         </span>
-                        <span class="font-bold">Automated Lifecycle Funnels</span>
-                    </li>
-                    <li class="flex items-center gap-4">
-                        <span class="w-6 h-6 rounded-full bg-brand-primary text-white flex items-center justify-center dark:bg-brand-accent dark:text-brand-dark">
-                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
-                        </span>
-                        <span class="font-bold">Real-time Performance Dashboards</span>
-                    </li>
-                </ul>
-            </div>
-        </section>
-
-        <!-- Contact Section -->
-        <section id="contact" class="py-24 md:py-40 px-6 max-w-4xl mx-auto text-center">
-            <div class="space-y-12 reveal">
-                <div class="space-y-4">
-                    <h2 class="text-4xl md:text-6xl font-bold tracking-tight">Ready to Flow?</h2>
-                    <p class="text-brand-grey font-medium text-lg dark:text-brand-grey/80">Let's build your enduring email strategy today.</p>
-                </div>
-
-                <div class="flat-card text-left">
-                    <div class="p-8 md:p-12 space-y-8">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                            <div class="space-y-2">
-                                <label class="text-[10px] uppercase tracking-widest font-bold text-brand-grey dark:text-brand-grey/80">Full Name</label>
-                                <input type="text" placeholder="John Doe" class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20 transition-all dark:bg-brand-dark dark:border-white/5 dark:focus:ring-brand-accent/20">
-                            </div>
-                            <div class="space-y-2">
-                                <label class="text-[10px] uppercase tracking-widest font-bold text-brand-grey dark:text-brand-grey/80">Work Email</label>
-                                <input type="email" placeholder="john@company.com" class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20 transition-all dark:bg-brand-dark dark:border-white/5 dark:focus:ring-brand-accent/20">
-                            </div>
-                        </div>
-                        <div class="space-y-2">
-                            <label class="text-[10px] uppercase tracking-widest font-bold text-brand-grey dark:text-brand-grey/80">Message</label>
-                            <textarea rows="4" placeholder="Tell us about your strategy goals..." class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/20 transition-all dark:bg-brand-dark dark:border-white/5 dark:focus:ring-brand-accent/20"></textarea>
-                        </div>
-                        <button class="w-full bg-brand-primary text-white py-5 rounded-full font-bold text-sm hover:scale-[1.01] active:scale-[0.99] transition-all custom-bezier shadow-xl shadow-brand-primary/20 dark:bg-brand-accent dark:text-brand-dark dark:shadow-brand-accent/10">
-                            Send Request
-                        </button>
-                    </div>
-                </div>
+                    </button>
+                </form>
             </div>
         </section>
     </main>
 
-    <footer class="py-12 border-t border-slate-200 px-6 dark:border-white/5">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
-            <img src="easyemaillogo.jpeg" alt="Easy Email Flow" class="h-10 w-auto rounded-xl opacity-80 hover:opacity-100 transition-opacity dark:opacity-60 dark:hover:opacity-90">
-            <div class="text-xs text-brand-grey font-medium uppercase tracking-widest dark:text-brand-grey/60">© 2026 EasyEmailFlow.com | Structuring Enduring Success</div>
-            <div class="flex gap-6">
-                <a href="#" class="text-xs font-bold hover:text-brand-primary transition-colors dark:hover:text-brand-accent">LinkedIn</a>
-                <a href="#" class="text-xs font-bold hover:text-brand-primary transition-colors dark:hover:text-brand-accent">X / Twitter</a>
+    <footer class="py-10 border-t border-brand-ink/10 px-6">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-brand-stone">
+            <div class="font-serif text-base text-brand-ink">Easy Email Flow</div>
+            <div>© 2026 EasyEmailFlow.com</div>
+            <div class="flex gap-5">
+                <a href="#" class="hover:text-brand-moss transition-colors">LinkedIn</a>
+                <a href="#" class="hover:text-brand-moss transition-colors">X</a>
             </div>
         </div>
     </footer>
 
-    <script>
-        // Reveal animations — GPU-friendly: no blur, only opacity + translate
-        const revealStyle = document.createElement('style');
-        revealStyle.innerHTML = `
-            .reveal {
-                opacity: 0;
-                transform: translateY(24px);
-                will-change: opacity, transform;
-                transition: opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1),
-                            transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
-            }
-            .reveal.active {
-                opacity: 1 !important;
-                transform: translateY(0) !important;
-            }
-        `;
-        document.head.appendChild(revealStyle);
+    <!-- Floating Edit -->
+    <div class="fixed bottom-6 right-6 z-[80]">
+        <a href="edits.html" class="w-11 h-11 bg-brand-ink text-brand-cream rounded-full shadow-xl flex items-center justify-center hover:scale-110 active:scale-95 transition-transform ease-soft duration-300">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+        </a>
+    </div>
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                    observer.unobserve(entry.target);
+    <script>
+        // Pillar entrance — slight delay so the page settles first
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('pillar-left')?.classList.add('in');
+                document.getElementById('pillar-right')?.classList.add('in');
+            }, 120);
+        });
+
+        // Reveal on scroll
+        const io = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    e.target.classList.add('active');
+                    io.unobserve(e.target);
                 }
             });
         }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+        document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
-        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-        // Smooth scroll for nav
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(a => {
+            a.addEventListener('click', e => {
+                const id = a.getAttribute('href');
+                if (id.length < 2) return;
+                const t = document.querySelector(id);
+                if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth' }); }
             });
         });
 
-        // Video scrubbing — rAF-throttled for buttery smoothness
-        const video = document.getElementById('hero-video');
-        const heroSection = document.getElementById('hero');
-        const playbackRate = 0.8;
-
-        let rafPending = false;
-        let lastScrollY = window.scrollY;
-
+        // Subtle parallax on pillars (rAF-throttled)
+        const pl = document.getElementById('pillar-left');
+        const pr = document.getElementById('pillar-right');
+        let rafPending = false, lastY = 0;
         window.addEventListener('scroll', () => {
-            lastScrollY = window.scrollY;
+            lastY = window.scrollY;
             if (!rafPending) {
                 rafPending = true;
                 requestAnimationFrame(() => {
                     rafPending = false;
-                    const heroHeight = heroSection.offsetHeight;
-                    if (lastScrollY < heroHeight && video.duration) {
-                        const pct = Math.min(lastScrollY / heroHeight, 1);
-                        video.currentTime = video.duration * pct * playbackRate;
-                    }
+                    const offset = Math.min(lastY * 0.18, 140);
+                    if (pl) pl.style.transform = `translateY(${-offset}px)`;
+                    if (pr) pr.style.transform = `translateY(${-offset}px)`;
                 });
             }
         }, { passive: true });
-
-        video.addEventListener('loadedmetadata', () => {
-            video.currentTime = 0;
-        });
     </script>
 </body>
 </html>
