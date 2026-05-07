@@ -94,10 +94,8 @@
         /* Dim siblings when any card is hovered */
         .work-grid:has(.reveal-card:hover) .reveal-card:not(:hover) > div { opacity: 0.55; transform: scale(0.985); }
         .work-grid:has(.reveal-card:hover) .reveal-card:not(:hover) > div { transition: opacity 0.6s cubic-bezier(0.22,1,0.36,1), transform 0.6s cubic-bezier(0.22,1,0.36,1); }
-        .reveal-card .extra { max-height: 0; opacity: 0; transform: translateY(8px);
-            transition: max-height 0.7s cubic-bezier(0.22,1,0.36,1), opacity 0.5s ease, transform 0.7s cubic-bezier(0.22,1,0.36,1); overflow: hidden; }
-        .reveal-card:hover .extra,
-        .reveal-card:focus-within .extra { max-height: 280px; opacity: 1; transform: translateY(0); }
+        .reveal-card .extra { opacity: 0.85; transition: opacity 0.5s cubic-bezier(0.22,1,0.36,1); }
+        .reveal-card:hover .extra { opacity: 1; }
         .reveal-card .arrow { transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
         .reveal-card:hover .arrow { transform: translate(3px, -3px) scale(1.06); }
         @media (prefers-reduced-motion: reduce) {
@@ -189,9 +187,8 @@
 
         <!-- Work / Bento -->
         <section id="work" class="py-28 md:py-44 px-6 max-w-7xl mx-auto">
-            <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-14 reveal">
+            <div class="mb-14 reveal">
                 <h2 class="font-serif text-5xl md:text-7xl tracking-tight leading-[1.0]">What we build.</h2>
-                <p class="text-brand-stone max-w-xs text-sm">Hover any block to expand.</p>
             </div>
 
             <div class="work-grid grid grid-cols-1 md:grid-cols-12 gap-5">
