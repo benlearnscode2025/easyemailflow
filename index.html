@@ -208,38 +208,36 @@
                 <h2 class="font-serif text-5xl md:text-7xl tracking-tight leading-[1.0]">What we build.</h2>
             </div>
 
-            <div class="work-grid grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 items-center">
-                <!-- Card 1 — Stability -->
-                <article class="reveal reveal-card image-card group" aria-label="Stability first">
+            <div class="work-grid grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-10 items-center">
+                <!-- Row 1: Stability (wide) + Foundational (tall) -->
+                <article class="reveal reveal-card image-card md:col-span-7 group" aria-label="Stability first">
                     <div class="h-full flex items-center justify-center">
-                        <a href="#contact" class="render block w-full max-w-[640px]">
+                        <a href="#contact" class="render block w-full max-w-[720px] mx-auto">
                             <img src="stability-card.png?v=4" alt="Stability first" class="w-full h-auto select-none" draggable="false">
                         </a>
                     </div>
                 </article>
 
-                <!-- Card 2 — Engage -->
-                <article class="reveal reveal-card image-card group" style="transition-delay:80ms" aria-label="Engage the audience">
+                <article class="reveal reveal-card image-card md:col-span-5 group" style="transition-delay:80ms" aria-label="Foundational automations">
                     <div class="h-full flex items-center justify-center">
-                        <a href="#contact" class="render block w-full max-w-[640px]">
-                            <img src="engage-card.png?v=1" alt="Engage the audience" class="w-full h-auto select-none" draggable="false">
-                        </a>
-                    </div>
-                </article>
-
-                <!-- Card 3 — Foundational -->
-                <article class="reveal reveal-card image-card group" style="transition-delay:160ms" aria-label="Foundational automations">
-                    <div class="h-full flex items-center justify-center">
-                        <a href="#contact" class="render block w-full max-w-[560px]">
+                        <a href="#contact" class="render block w-full max-w-[480px] mx-auto">
                             <img src="foundational-card.png?v=1" alt="Foundational automations" class="w-full h-auto select-none" draggable="false">
                         </a>
                     </div>
                 </article>
 
-                <!-- Card 4 — Bespoke -->
-                <article class="reveal reveal-card image-card group" style="transition-delay:240ms" aria-label="Bespoke templates">
+                <!-- Row 2: Engage (wide) + Bespoke (wide, slightly smaller) -->
+                <article class="reveal reveal-card image-card md:col-span-7 group" style="transition-delay:160ms" aria-label="Engage the audience">
                     <div class="h-full flex items-center justify-center">
-                        <a href="#contact" class="render block w-full max-w-[640px]">
+                        <a href="#contact" class="render block w-full max-w-[720px] mx-auto">
+                            <img src="engage-card.png?v=1" alt="Engage the audience" class="w-full h-auto select-none" draggable="false">
+                        </a>
+                    </div>
+                </article>
+
+                <article class="reveal reveal-card image-card md:col-span-5 group" style="transition-delay:240ms" aria-label="Bespoke templates">
+                    <div class="h-full flex items-center justify-center">
+                        <a href="#contact" class="render block w-full max-w-[520px] mx-auto">
                             <img src="bespoke-card.png?v=1" alt="Bespoke templates" class="w-full h-auto select-none" draggable="false">
                         </a>
                     </div>
