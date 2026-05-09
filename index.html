@@ -103,21 +103,38 @@
         }
 
         /* Image-rendered card — uses pre-rendered 3D image */
-        .image-card { background: transparent !important; perspective: 1200px; }
+        .image-card { background: transparent !important; perspective: 1400px; }
         .image-card .render {
-            transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+            position: relative;
+            transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
             will-change: transform;
             transform-style: preserve-3d;
+            /* Round the hit area so cursor near rounded card corner doesn't trigger */
+            clip-path: inset(2% round 32px);
         }
+        /* Soft radial glow that tracks the cursor */
+        .image-card .render::before {
+            content: '';
+            position: absolute;
+            inset: -8%;
+            border-radius: 48px;
+            background: radial-gradient(circle 240px at var(--mx, 50%) var(--my, 50%),
+                rgba(31, 77, 63, 0.42), rgba(31, 77, 63, 0) 65%);
+            filter: blur(28px);
+            opacity: 0;
+            transition: opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+            z-index: -1;
+            pointer-events: none;
+        }
+        .image-card:hover .render::before { opacity: 1; }
+
         .reveal-card.image-card > div { box-shadow: none !important; transform: none !important; background: transparent !important; }
         .reveal-card.image-card:hover > div { transform: none !important; box-shadow: none !important; }
         /* JS handles tilt on mousemove; this is the rest state and the gentle pop on hover */
-        .reveal-card.image-card:hover .render { transform: translateY(-6px) scale(1.02); }
-        /* Disable global sibling-dim for image cards */
-        .work-grid:has(.reveal-card:hover) .reveal-card.image-card:not(:hover) > div { opacity: 1 !important; transform: none !important; }
-        .work-grid:has(.reveal-card:hover) .reveal-card.image-card:not(:hover) .render { opacity: 1; transform: none; }
-        /* Don't dim non-image siblings either — just let the hovered one pop */
+        .reveal-card.image-card:hover .render { transform: translateY(-4px) scale(1.012); }
+        /* Don't dim siblings — just let the hovered one pop */
         .work-grid:has(.reveal-card:hover) .reveal-card:not(:hover) > div { opacity: 1; transform: none; }
+        .work-grid:has(.reveal-card:hover) .reveal-card.image-card:not(:hover) .render { opacity: 1; transform: none; }
         /* Marquee */
         @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
         .marquee-track { animation: marquee 38s linear infinite; }
@@ -238,7 +255,7 @@
                 <article class="reveal reveal-card image-card md:col-span-5 group" style="transition-delay:240ms" aria-label="Bespoke templates">
                     <div class="h-full flex items-center justify-center">
                         <a href="#contact" class="render block w-full max-w-[520px] mx-auto">
-                            <img src="bespoke-card.png?v=1" alt="Bespoke templates" class="w-full h-auto select-none" draggable="false">
+                            <img src="bespoke-card.png?v=2" alt="Bespoke templates" class="w-full h-auto select-none" draggable="false">
                         </a>
                     </div>
                 </article>
@@ -348,28 +365,34 @@
             });
         });
 
-        // Mouse-tracked tilt on image cards
+        // Mouse-tracked tilt + radial glow on image cards
         (() => {
             const supportsHover = window.matchMedia('(hover: hover)').matches;
             if (!supportsHover) return;
-            const maxTilt = 7; // degrees
+            const maxTilt = 4; // degrees — subtle
             document.querySelectorAll('.image-card').forEach(card => {
                 const render = card.querySelector('.render');
                 if (!render) return;
-                let frame = 0;
                 let pending = false;
-                let lastX = 0, lastY = 0;
+                let lastX = 0, lastY = 0;        // -1..1 normalized
+                let mxPct = 50, myPct = 50;      // 0..100 for radial gradient
                 const apply = () => {
                     pending = false;
-                    render.style.transform = `perspective(1000px) rotateY(${lastX * maxTilt}deg) rotateX(${-lastY * maxTilt}deg) translateY(-6px) scale(1.02)`;
+                    render.style.transform = `perspective(1400px) rotateY(${lastX * maxTilt}deg) rotateX(${-lastY * maxTilt}deg) translateY(-4px) scale(1.012)`;
+                    render.style.setProperty('--mx', mxPct + '%');
+                    render.style.setProperty('--my', myPct + '%');
                 };
-                card.addEventListener('mousemove', e => {
-                    const rect = card.getBoundingClientRect();
-                    lastX = ((e.clientX - rect.left) / rect.width - 0.5) * 2;   // -1..1
-                    lastY = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
+                render.addEventListener('mousemove', e => {
+                    const rect = render.getBoundingClientRect();
+                    const xRatio = (e.clientX - rect.left) / rect.width;
+                    const yRatio = (e.clientY - rect.top) / rect.height;
+                    lastX = (xRatio - 0.5) * 2;
+                    lastY = (yRatio - 0.5) * 2;
+                    mxPct = xRatio * 100;
+                    myPct = yRatio * 100;
                     if (!pending) { pending = true; requestAnimationFrame(apply); }
                 });
-                card.addEventListener('mouseleave', () => {
+                render.addEventListener('mouseleave', () => {
                     render.style.transform = '';
                 });
             });
