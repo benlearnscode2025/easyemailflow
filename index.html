@@ -219,46 +219,68 @@
             </div>
         </section>
 
-        <!-- Work / Bento -->
-        <section id="work" class="py-28 md:py-44 px-6 max-w-7xl mx-auto">
-            <div class="mb-14 reveal">
-                <h2 class="font-serif text-5xl md:text-7xl tracking-tight leading-[1.0]">What we build.</h2>
+        <!-- Work / Editorial zig-zag -->
+        <section id="work" class="py-28 md:py-44 px-6 max-w-[1400px] mx-auto relative">
+            <div class="mb-20 md:mb-28 flex flex-col md:flex-row md:items-end md:justify-between gap-6 reveal">
+                <h2 class="font-serif text-5xl md:text-7xl lg:text-8xl tracking-tight leading-[0.95]">What we <em class="text-brand-moss">build.</em></h2>
+                <div class="text-[11px] uppercase tracking-[0.3em] font-semibold text-brand-stone md:pb-3">Four pillars · One system</div>
             </div>
 
-            <div class="work-grid grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-10 items-center">
-                <!-- Row 1: Stability (wide) + Foundational (tall) -->
-                <article class="reveal reveal-card image-card md:col-span-7 group" aria-label="Stability first">
-                    <div class="h-full flex items-center justify-center">
-                        <a href="#contact" class="render block w-full max-w-[720px] mx-auto">
+            <!-- Vertical guide line -->
+            <div class="hidden md:block absolute left-1/2 top-[280px] bottom-32 w-px bg-gradient-to-b from-transparent via-brand-ink/10 to-transparent pointer-events-none -z-10"></div>
+
+            <div class="work-grid space-y-24 md:space-y-44">
+                <!-- 01 Stability — left -->
+                <div class="md:grid md:grid-cols-12 md:gap-10 items-center reveal">
+                    <article class="md:col-span-8 reveal-card image-card group" aria-label="Stability first">
+                        <a href="#contact" class="render block w-full max-w-[720px]">
                             <img src="stability-card.png?v=5" alt="Stability first" class="w-full h-auto select-none" draggable="false">
                         </a>
-                    </div>
-                </article>
+                    </article>
+                    <aside class="md:col-span-4 mt-10 md:mt-0 md:pl-8 lg:pl-16">
+                        <div class="font-serif text-7xl md:text-8xl text-brand-moss/80 leading-none">01</div>
+                        <p class="mt-6 max-w-[26ch] text-brand-stone leading-relaxed">The bedrock of every program. We harden deliverability, compliance, and ESP performance so the inbox is always open.</p>
+                    </aside>
+                </div>
 
-                <article class="reveal reveal-card image-card md:col-span-5 group" style="transition-delay:80ms" aria-label="Foundational automations">
-                    <div class="h-full flex items-center justify-center">
-                        <a href="#contact" class="render block w-full max-w-[480px] mx-auto">
-                            <img src="foundational-card.png?v=3" alt="Foundational automations" class="w-full h-auto select-none" draggable="false">
-                        </a>
-                    </div>
-                </article>
-
-                <!-- Row 2: Engage (wide) + Bespoke (wide, slightly smaller) -->
-                <article class="reveal reveal-card image-card md:col-span-7 group" style="transition-delay:160ms" aria-label="Engage the audience">
-                    <div class="h-full flex items-center justify-center">
-                        <a href="#contact" class="render block w-full max-w-[720px] mx-auto">
+                <!-- 02 Engage — right -->
+                <div class="md:grid md:grid-cols-12 md:gap-10 items-center reveal">
+                    <aside class="md:col-span-4 md:order-1 order-2 mt-10 md:mt-0 md:pr-8 lg:pr-16 md:text-right">
+                        <div class="font-serif text-7xl md:text-8xl text-brand-moss/80 leading-none">02</div>
+                        <p class="mt-6 max-w-[26ch] text-brand-stone leading-relaxed md:ml-auto">Audits and roadmaps that turn raw lists into a relationship. Strategy that hears the audience first.</p>
+                    </aside>
+                    <article class="md:col-span-8 md:order-2 order-1 reveal-card image-card group" aria-label="Engage the audience">
+                        <a href="#contact" class="render block w-full max-w-[720px] md:ml-auto">
                             <img src="engage-card.png?v=3" alt="Engage the audience" class="w-full h-auto select-none" draggable="false">
                         </a>
-                    </div>
-                </article>
+                    </article>
+                </div>
 
-                <article class="reveal reveal-card image-card md:col-span-5 group" style="transition-delay:240ms" aria-label="Bespoke templates">
-                    <div class="h-full flex items-center justify-center">
-                        <a href="#contact" class="render block w-full max-w-[640px] mx-auto">
+                <!-- 03 Foundational — left, smaller (square card) -->
+                <div class="md:grid md:grid-cols-12 md:gap-10 items-center reveal">
+                    <article class="md:col-span-7 lg:col-span-6 reveal-card image-card group" aria-label="Foundational automations">
+                        <a href="#contact" class="render block w-full max-w-[540px]">
+                            <img src="foundational-card.png?v=3" alt="Foundational automations" class="w-full h-auto select-none" draggable="false">
+                        </a>
+                    </article>
+                    <aside class="md:col-span-5 lg:col-span-6 mt-10 md:mt-0 md:pl-8 lg:pl-20">
+                        <div class="font-serif text-7xl md:text-8xl text-brand-moss/80 leading-none">03</div>
+                        <p class="mt-6 max-w-[26ch] text-brand-stone leading-relaxed">Welcome, re-engagement, and post-purchase flows engineered to run while you sleep — and earn while they sleep.</p>
+                    </aside>
+                </div>
+
+                <!-- 04 Bespoke — right -->
+                <div class="md:grid md:grid-cols-12 md:gap-10 items-center reveal">
+                    <aside class="md:col-span-4 md:order-1 order-2 mt-10 md:mt-0 md:pr-8 lg:pr-16 md:text-right">
+                        <div class="font-serif text-7xl md:text-8xl text-brand-moss/80 leading-none">04</div>
+                        <p class="mt-6 max-w-[26ch] text-brand-stone leading-relaxed md:ml-auto">On-brand, modular, high-converting templates. Designed once. Deployed everywhere.</p>
+                    </aside>
+                    <article class="md:col-span-8 md:order-2 order-1 reveal-card image-card group" aria-label="Bespoke templates">
+                        <a href="#contact" class="render block w-full max-w-[720px] md:ml-auto">
                             <img src="bespoke-card.png?v=4" alt="Bespoke templates" class="w-full h-auto select-none" draggable="false">
                         </a>
-                    </div>
-                </article>
+                    </article>
+                </div>
             </div>
         </section>
 
